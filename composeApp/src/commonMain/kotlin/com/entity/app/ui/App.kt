@@ -1,4 +1,4 @@
-package com.entity.app
+package com.entity.app.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.entity.app.ui.theme.EntityTheme
 
 @Composable
-internal fun App() = AppTheme {
+internal fun App() = EntityTheme {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -59,5 +60,3 @@ internal fun App() = AppTheme {
         }
     }
 }
-
-internal expect fun openUrl(url: String?)
