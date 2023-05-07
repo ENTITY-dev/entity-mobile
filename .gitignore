@@ -13,3 +13,4 @@ xcuserdata/
 Pods/
 *.jks
 *yarn.lock
+/iosApp/iosApp.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist

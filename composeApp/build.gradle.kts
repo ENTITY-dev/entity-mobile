@@ -47,6 +47,7 @@ kotlin {
                 implementation(libs.napier)
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.ktor.core)
+                implementation(libs.ktor.core) // !!!
                 implementation(libs.composeIcons.featherIcons)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.datetime)
@@ -54,6 +55,17 @@ kotlin {
                 implementation(libs.koin.core)
                 implementation(libs.kstore)
                 implementation(libs.apollo.runtime)
+
+                implementation("io.ktor:ktor-client-content-negotiation:2.2.4")
+                    implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.4")
+                    implementation("io.ktor:ktor-client-logging:2.2.4")
+
+                implementation("com.adeo:kviewmodel:0.14") // Core functions
+                implementation("com.adeo:kviewmodel-compose:0.14") // Compose extensions
+                implementation("com.adeo:kviewmodel-odyssey:0.14") // Odyssey extensions
+
+                implementation("io.github.alexgladkov:odyssey-core:1.3.1") // For core classes
+                implementation("io.github.alexgladkov:odyssey-compose:1.3.1") // For compose extensions
             }
         }
 
