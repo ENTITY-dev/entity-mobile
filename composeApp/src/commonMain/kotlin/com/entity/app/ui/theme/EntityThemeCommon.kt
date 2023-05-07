@@ -5,8 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import kotlin.experimental.ExperimentalObjCRefinement
-import kotlin.native.HiddenFromObjC
 
 data class EntityColors(
   val mainText: Color,
@@ -36,7 +34,7 @@ data class EntityShape(
   val big: RoundedCornerShape,
 )
 
-object EntityThemeProvider {
+object EntityTheme {
   @Composable
   fun colors() = LocalEntityColors.current
 

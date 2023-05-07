@@ -1,43 +1,49 @@
 package com.entity.app.ui.screens.feed
 
-import com.adeo.kviewmodel.BaseSharedViewModel
+import cafe.adriel.voyager.core.model.coroutineScope
 import com.entity.app.utils.DateTimeKtx
 import com.entity.app.data.FeedListRepository
 import com.entity.app.data.PostResponseModel
+import com.entity.app.ui.EntityViewModel
 import com.entity.app.ui.screens.feed.FeedScreenAction.OpenWebViewer
 import com.entity.app.ui.screens.feed.FeedScreenEvent.ViewAppear
+import com.entity.app.ui.screens.feed.FeedScreenState.Result
+import com.entity.app.ui.screens.feed.PostUiModel.Companion.PLACEHOLDER_ID
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
 class FeedScreenViewModel :
-  BaseSharedViewModel<FeedScreenViewState, FeedScreenAction, FeedScreenEvent>(initialState = FeedScreenViewState.PLACEHOLDERS),
-  KoinComponent {
+  EntityViewModel<FeedScreenState, FeedScreenEvent, FeedScreenAction>(initialState = FeedScreenState.LOADING) {
 
   private val feedListRepository: FeedListRepository by inject()
 
   private val timeFormatter = DateTimeKtx()
 
+  private var updateFeedJob: Job? = null
+
   override fun obtainEvent(viewEvent: FeedScreenEvent) {
     when (viewEvent) {
       FeedScreenEvent.RefreshFeedListScreen -> {
-        updateFeed(clearCache = true, loadMore = false)
+        feedListRepository.clearCache()
+        loadFeed()
       }
+
       FeedScreenEvent.LoadNewPage -> {
-        if (viewState.isRefreshing) {
-          return
-        }
-        updateFeed(clearCache = false, loadMore = true)
+        increaseFeed()
       }
+
       ViewAppear -> {
-        updateFeed(clearCache = false, loadMore = false)
+        loadFeed()
       }
+
       is FeedScreenEvent.SceneClick -> {
         onSceneClick(viewEvent.model)
       }
+
       is FeedScreenEvent.OptionsClick -> {
         onOptionsClick(viewEvent.model)
       }
@@ -63,35 +69,64 @@ class FeedScreenViewModel :
     viewAction = OpenWebViewer(model.sceneId)
   }
 
-  private var updateFeedJob: Job? = null
-
-  private fun updateFeed(clearCache: Boolean, loadMore: Boolean) {
+  private fun loadFeed() {
     updateFeedJob?.cancel()
-    updateFeedJob = viewModelScope.launch {
-      if (clearCache || viewState.models.isEmpty()) {
-        viewState = FeedScreenViewState.PLACEHOLDERS
-      }
-      if (loadMore) {
-        val uiModels = viewState.models.toMutableList()
-        uiModels.add(PostUiModel.Empty)
-        viewState = FeedScreenViewState(models = uiModels, isRefreshing = true, showPlaceHolder = false, canLoadMore = false)
-      }
+    viewState = FeedScreenState.LOADING
+    updateFeedJob = coroutineScope.launch {
       do {
         viewState = try {
-          val response = feedListRepository.getFeedPostResponseModels(clearCache = clearCache, loadMore = loadMore)
+          val response = feedListRepository.getFeedPostResponseModels(loadMore = true)
           val uiModels = response.models.map {
             mapResponseToUiModels(it)
           }
-          FeedScreenViewState(models = uiModels, isRefreshing = false, showPlaceHolder = false, canLoadMore = response.canLoadMore)
+          Result(
+            models = uiModels,
+            isRefreshing = false,
+            showPlaceHolder = false,
+            canLoadMore = response.canLoadMore
+          )
         } catch (e: Exception) {
-          if (clearCache) {
-            FeedScreenViewState.PLACEHOLDERS
-          } else {
-            viewState
-          }
+          Napier.e("Exception in FeedScreenViewModel", e)
+          FeedScreenState.LOADING
         }
         delay(5000L)
-      } while (viewState == FeedScreenViewState.PLACEHOLDERS)
+      } while (viewState == FeedScreenState.LOADING)
     }
   }
+
+  private fun increaseFeed() {
+    if (updateFeedJob?.isActive == true) {
+      return
+    }
+    val state = viewState as? Result ?: return
+    val uiModelsWithPlaceholder = state.models.toMutableList()
+    uiModelsWithPlaceholder.add(PostUiModel.Empty)
+    viewState =
+      Result(models = uiModelsWithPlaceholder, isRefreshing = true, showPlaceHolder = false, canLoadMore = false)
+    coroutineScope.launch {
+      do {
+        viewState = try {
+          val response = feedListRepository.getFeedPostResponseModels(loadMore = true)
+          val uiModels = response.models.map {
+            mapResponseToUiModels(it)
+          }
+          Result(
+            models = uiModels,
+            isRefreshing = false,
+            showPlaceHolder = false,
+            canLoadMore = response.canLoadMore
+          )
+        } catch (e: Exception) {
+          viewState
+        }
+        delay(5000L)
+      } while (shouldIncreaseFeed())
+    }
+  }
+
+  private fun shouldIncreaseFeed(): Boolean {
+    val state = viewState as? Result ?: return false
+    return state.models.find { it.sceneId == PLACEHOLDER_ID } != null
+  }
+
 }

@@ -19,7 +19,7 @@ import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-private const val DEFAULT_HOST = "5.253.61.40"
+private const val DEFAULT_HOST = "entity.lol"
 private const val CONNECT_TIMEOUT_MS = 15000L
 private const val REQUEST_TIMEOUT_MS = 5000L
 
