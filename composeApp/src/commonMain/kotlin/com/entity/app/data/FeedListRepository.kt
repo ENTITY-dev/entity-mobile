@@ -7,6 +7,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.client.request.url
+import kotlinx.coroutines.delay
 import kotlin.jvm.Volatile
 
 
@@ -33,6 +34,20 @@ class FeedListRepository constructor(
       }.body()
       val feedPostResponseModels = response.items
       maxFeedModelsCount = response.maxCount
+      cachedFeedPostResponseModels.addAll(feedPostResponseModels)
+    }
+    return FeedListResponseModel(
+      models = cachedFeedPostResponseModels,
+      canLoadMore = canLoadMore
+    )
+  }
+
+  suspend fun getTestFeedPostResponseModels(loadMore: Boolean): FeedListResponseModel {
+    val canLoadMore = cachedFeedPostResponseModels.size < maxFeedModelsCount
+    if (shouldMakeRequest(loadMore, canLoadMore)) {
+      delay(3000)
+      val feedPostResponseModels = testList
+      maxFeedModelsCount = 1000
       cachedFeedPostResponseModels.addAll(feedPostResponseModels)
     }
     return FeedListResponseModel(

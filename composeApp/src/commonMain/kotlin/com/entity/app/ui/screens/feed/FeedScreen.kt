@@ -10,6 +10,9 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.entity.app.ui.Navigation
 import com.entity.app.ui.screens.feed.FeedScreenAction.OpenWebViewer
+import com.entity.app.ui.screens.feed.FeedScreenEvent.LoadNewPage
+import com.entity.app.ui.screens.feed.FeedScreenEvent.OptionsClick
+import com.entity.app.ui.screens.feed.FeedScreenEvent.SceneClick
 
 import com.entity.app.ui.screens.feed.FeedScreenEvent.ViewAppear
 import com.entity.app.ui.screens.feed.FeedScreenState.EMPTY
@@ -26,32 +29,31 @@ class FeedScreen : Screen {
     val viewState by screenModel.viewStates().collectAsState()
     val viewAction by screenModel.viewActions().collectAsState(null)
 
-    when (viewState) {
+    when (val state = viewState) {
       EMPTY -> {
-
+        FeedListWithPlaceholders(count = 1)
       }
+
       LOADING -> {
-
+        FeedListWithPlaceholders(count = 3)
       }
-      is Result -> {
 
+      is Result -> {
+        FeedListWithPost(
+          feedList = state.models,
+          canLoadMore = state.canLoadMore,
+          loadMore = { screenModel.obtainEvent(LoadNewPage) },
+          onSceneClick = { screenModel.obtainEvent(SceneClick(it)) },
+          onOptionsClick = { screenModel.obtainEvent(OptionsClick(it)) }
+        )
       }
     }
 
-//    if (!viewState.showPlaceHolder) {
-//      FeedListWithPost(
-//        feedList = viewState.models,
-//        canLoadMore = viewState.canLoadMore,
-//        loadMore = { viewModel.obtainEvent(LoadNewPage) },
-//        onSceneClick = { viewModel.obtainEvent(SceneClick(it)) },
-//        onOptionsClick = { viewModel.obtainEvent(OptionsClick(it)) }
-//      )
-//    } else {
-//      FeedListWithPlaceholders(count = viewState.models.size)
-//    }
-
     when (viewAction) {
-//      is OpenWebViewer -> navigator.push()
+      is OpenWebViewer -> {
+
+      }
+
       else -> {}
     }
 

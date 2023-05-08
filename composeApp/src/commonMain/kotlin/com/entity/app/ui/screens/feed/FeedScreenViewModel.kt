@@ -75,7 +75,7 @@ class FeedScreenViewModel :
     updateFeedJob = coroutineScope.launch {
       do {
         viewState = try {
-          val response = feedListRepository.getFeedPostResponseModels(loadMore = true)
+          val response = feedListRepository.getTestFeedPostResponseModels(loadMore = true)
           val uiModels = response.models.map {
             mapResponseToUiModels(it)
           }
@@ -106,7 +106,7 @@ class FeedScreenViewModel :
     coroutineScope.launch {
       do {
         viewState = try {
-          val response = feedListRepository.getFeedPostResponseModels(loadMore = true)
+          val response = feedListRepository.getTestFeedPostResponseModels(loadMore = true)
           val uiModels = response.models.map {
             mapResponseToUiModels(it)
           }

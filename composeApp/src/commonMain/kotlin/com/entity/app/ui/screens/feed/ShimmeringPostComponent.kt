@@ -1,22 +1,22 @@
 package com.entity.app.ui.screens.feed//package com.entity.app.ui.components.feed
-//
-//import androidx.compose.foundation.background
-//import androidx.compose.foundation.layout.Box
-//import androidx.compose.foundation.layout.Column
-//import androidx.compose.foundation.layout.Row
-//import androidx.compose.foundation.layout.fillMaxWidth
-//import androidx.compose.foundation.layout.height
-//import androidx.compose.foundation.layout.padding
-//import androidx.compose.foundation.layout.size
-//import androidx.compose.foundation.shape.CircleShape
-//import androidx.compose.runtime.Composable
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.draw.clip
-//import androidx.compose.ui.unit.dp
-//import com.entity.app.ui.theme.EntityThemeProvider
-//
-//@Composable
-//fun PlaceholderPostComponent(modifier: Modifier) {
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun PlaceholderPostComponent(modifier: Modifier) {
+  ShimmerPostPlaceHolderAnimation()
 //  Box(modifier) {
 //    Column(modifier = Modifier.fillMaxWidth()) {
 //      Box(
@@ -48,4 +48,4 @@ package com.entity.app.ui.screens.feed//package com.entity.app.ui.components.fee
 //      }
 //    }
 //  }
-//}
+}

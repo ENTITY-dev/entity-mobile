@@ -1,34 +1,47 @@
-package com.entity.app.ui.screens.feed//package com.entity.app.ui.components.feed
-//
-//import androidx.compose.foundation.Image
-//import androidx.compose.foundation.background
-//import androidx.compose.foundation.layout.Arrangement
-//import androidx.compose.foundation.layout.Box
-//import androidx.compose.foundation.layout.Column
-//import androidx.compose.foundation.layout.Row
-//import androidx.compose.foundation.layout.fillMaxSize
-//import androidx.compose.foundation.layout.fillMaxWidth
-//import androidx.compose.foundation.layout.height
-//import androidx.compose.foundation.layout.padding
-//import androidx.compose.foundation.layout.size
-//import androidx.compose.foundation.layout.width
-//import androidx.compose.foundation.layout.wrapContentHeight
-//import androidx.compose.foundation.shape.CircleShape
-//import androidx.compose.material.Text
-//import androidx.compose.runtime.Composable
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.draw.clip
-//import androidx.compose.ui.layout.ContentScale
-//
-//@Composable
-//fun PostComponent(
-//  modifier: Modifier,
-//  model: PostUiModel,
-//  onSceneClick: (PostUiModel) -> Unit,
-//  onOptionsClick: (PostUiModel) -> Unit,
-//  shimmerInstance: Shimmer,
-//) {
+package com.entity.app.ui.screens.feed
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import com.entity.app.ui.RippleTransparentButton
+import com.entity.app.ui.theme.EntityTheme
+import com.seiko.imageloader.LocalImageLoader
+import com.seiko.imageloader.rememberAsyncImagePainter
+import io.github.skeptick.libres.compose.painterResource
+
+@Composable
+fun PostComponent(
+  modifier: Modifier,
+  model: PostUiModel,
+  onSceneClick: (PostUiModel) -> Unit,
+  onOptionsClick: (PostUiModel) -> Unit,
+) {
+
+  val url = model.scenePreviewUrl ?: ""
+  val painter = rememberAsyncImagePainter(url)
+  Image(painter, null, modifier = Modifier.size(100.dp).background(color = Color.Green))
+
 //  RippleTransparentButton(onClick = { onSceneClick.invoke(model) },
 //    modifier = Modifier
 //      .fillMaxWidth()
@@ -74,14 +87,14 @@ package com.entity.app.ui.screens.feed//package com.entity.app.ui.components.fee
 //        Column(modifier = Modifier.padding(start = 12.dp)) {
 //          Text(modifier = Modifier.width(200.dp),
 //            text = model.sceneTitle,
-//            style = EntityTheme.typography.title,
-//            color = EntityTheme.colors.mainText)
+//            style = EntityTheme.typography().title,
+//            color = EntityTheme.colors().mainText)
 //          Text(modifier = Modifier
 //            .padding(top = 2.dp)
 //            .width(200.dp),
 //            text = model.sceneSubtitle,
-//            style = EntityTheme.typography.subtitle,
-//            color = EntityTheme.colors.minorText)
+//            style = EntityTheme.typography().subtitle,
+//            color = EntityTheme.colors().minorText)
 //        }
 //        Column(modifier = Modifier
 //          .fillMaxWidth()
@@ -92,15 +105,15 @@ package com.entity.app.ui.screens.feed//package com.entity.app.ui.components.fee
 //            onClick = { onOptionsClick.invoke(model) },
 //            modifier = Modifier.size(24.dp)
 //          ) {
-//            Image(
-//              painter = painterResource(R.drawable.ic_baseline_more_vert_24),
-//              contentDescription = "options",
-//              contentScale = ContentScale.Crop,
-//              modifier = Modifier.fillMaxSize()
-//            )
+////            Image(
+////              painter = painterResource(R.drawable.ic_baseline_more_vert_24),
+////              contentDescription = "options",
+////              contentScale = ContentScale.Crop,
+////              modifier = Modifier.fillMaxSize()
+////            )
 //          }
 //        }
 //      }
 //    }
 //  }
-//}
+}
