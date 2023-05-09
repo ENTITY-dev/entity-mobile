@@ -12,7 +12,9 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.koin.core.component.inject
 import androidx.compose.ui.unit.sp
+import com.entity.app.data.FeedListRepository
 import com.entity.app.ui.theme.LocalEntityShape
 import com.entity.app.ui.theme.LocalEntityTypography
 import com.entity.app.ui.theme.SirenSize
@@ -84,7 +86,7 @@ fun EntityTheme(
 
   val shapes = EntityShape(
     small = RoundedCornerShape(0.dp),
-    medium = RoundedCornerShape(16.dp),
+    medium = RoundedCornerShape(4.dp),
     big = RoundedCornerShape(20.dp)
   )
 
