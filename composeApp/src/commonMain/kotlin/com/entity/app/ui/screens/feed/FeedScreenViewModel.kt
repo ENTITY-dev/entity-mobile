@@ -17,7 +17,7 @@ import org.koin.core.component.inject
 
 
 class FeedScreenViewModel :
-  EntityViewModel<FeedScreenState, FeedScreenEvent, FeedScreenAction>(initialState = FeedScreenState.LOADING) {
+  EntityViewModel<FeedScreenState, FeedScreenEvent, FeedScreenAction>(initialState = FeedScreenState.EMPTY) {
 
   private val feedListRepository: FeedListRepository by inject()
 
@@ -73,24 +73,21 @@ class FeedScreenViewModel :
     updateFeedJob?.cancel()
     viewState = FeedScreenState.LOADING
     updateFeedJob = coroutineScope.launch {
-      do {
-        viewState = try {
-          val response = feedListRepository.getTestFeedPostResponseModels(loadMore = true)
-          val uiModels = response.models.map {
-            mapResponseToUiModels(it)
-          }
-          Result(
-            models = uiModels,
-            isRefreshing = false,
-            showPlaceHolder = false,
-            canLoadMore = response.canLoadMore
-          )
-        } catch (e: Exception) {
-          Napier.e("Exception in FeedScreenViewModel", e)
-          FeedScreenState.LOADING
+      viewState = try {
+        val response = feedListRepository.getTestFeedPostResponseModels(loadMore = false)
+        val uiModels = response.models.map {
+          mapResponseToUiModels(it)
         }
-        delay(5000L)
-      } while (viewState == FeedScreenState.LOADING)
+        Result(
+          models = uiModels,
+          isRefreshing = false,
+          showPlaceHolder = false,
+          canLoadMore = response.canLoadMore
+        )
+      } catch (e: Exception) {
+        Napier.e("Exception in FeedScreenViewModel", e)
+        FeedScreenState.Error(e.message ?: "")
+      }
     }
   }
 
@@ -101,32 +98,34 @@ class FeedScreenViewModel :
     val state = viewState as? Result ?: return
     val uiModelsWithPlaceholder = state.models.toMutableList()
     uiModelsWithPlaceholder.add(PostUiModel.Empty)
-    viewState =
-      Result(models = uiModelsWithPlaceholder, isRefreshing = true, showPlaceHolder = false, canLoadMore = false)
-    coroutineScope.launch {
-      do {
-        viewState = try {
-          val response = feedListRepository.getTestFeedPostResponseModels(loadMore = true)
-          val uiModels = response.models.map {
-            mapResponseToUiModels(it)
-          }
-          Result(
-            models = uiModels,
-            isRefreshing = false,
-            showPlaceHolder = false,
-            canLoadMore = response.canLoadMore
-          )
-        } catch (e: Exception) {
-          viewState
+    viewState = Result(
+      models = uiModelsWithPlaceholder,
+      isRefreshing = true,
+      showPlaceHolder = false,
+      canLoadMore = false
+    )
+    updateFeedJob = coroutineScope.launch {
+      viewState = try {
+        val response = feedListRepository.getTestFeedPostResponseModels(loadMore = true)
+        val uiModels = response.models.map {
+          mapResponseToUiModels(it)
         }
-        delay(5000L)
-      } while (shouldIncreaseFeed())
+        Result(
+          models = uiModels,
+          isRefreshing = false,
+          showPlaceHolder = false,
+          canLoadMore = response.canLoadMore
+        )
+      } catch (e: Exception) {
+        Napier.e("Exception in FeedScreenViewModel", e)
+        Result(
+          models = state.models.filter { !it.isPlaceholder() },
+          isRefreshing = false,
+          showPlaceHolder = false,
+          canLoadMore = true
+        )
+      }
     }
-  }
-
-  private fun shouldIncreaseFeed(): Boolean {
-    val state = viewState as? Result ?: return false
-    return state.models.find { it.sceneId == PLACEHOLDER_ID } != null
   }
 
 }

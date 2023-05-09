@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -125,13 +126,14 @@ fun PostComponent(
         ) {
           RippleTransparentButton(
             onClick = { onOptionsClick.invoke(model) },
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
           ) {
             Image(
               painter = more,
               contentDescription = "options",
               contentScale = ContentScale.Crop,
-              modifier = Modifier.fillMaxSize()
+              modifier = Modifier.fillMaxSize(),
+              colorFilter = ColorFilter.tint(Color.White)
             )
           }
         }

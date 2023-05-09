@@ -51,7 +51,9 @@ class FeedListRepository constructor(
       cachedFeedPostResponseModels.addAll(feedPostResponseModels)
     }
     return FeedListResponseModel(
-      models = cachedFeedPostResponseModels,
+      models = cachedFeedPostResponseModels.mapIndexed { index, postResponseModel ->
+        postResponseModel.copy(id = index.toString())
+      },
       canLoadMore = canLoadMore
     )
   }

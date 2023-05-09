@@ -31,9 +31,9 @@ fun FeedListWithPost(
 ) {
   val listState = rememberLazyListState()
 
-  val endOfListReached = remember {
+  val isScrolledToEnd = remember {
     derivedStateOf {
-      listState.isScrolledToEnd() && canLoadMore
+      listState.isScrolledToEnd()
     }
   }
 
@@ -60,13 +60,18 @@ fun FeedListWithPost(
       }
     }
   }
-  LaunchedEffect(endOfListReached) {
+
+  if (isScrolledToEnd.value && canLoadMore) {
     loadMore.invoke()
   }
+
 }
 
-private fun LazyListState.isScrolledToEnd() =
-  layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
+private fun LazyListState.isScrolledToEnd(): Boolean {
+  val lastVisible = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+  val total = layoutInfo.totalItemsCount
+  return lastVisible in total - 1..total
+}
 
 
 @Composable

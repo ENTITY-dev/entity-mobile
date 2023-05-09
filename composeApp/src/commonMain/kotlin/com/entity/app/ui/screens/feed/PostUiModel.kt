@@ -5,8 +5,10 @@ data class PostUiModel(
   val sceneTitle: String,
   val sceneSubtitle: String,
   val authorImageUrl: String?,
-  val scenePreviewUrl: String?
+  val scenePreviewUrl: String?,
 ) {
+  fun isPlaceholder() = this == Empty
+
   companion object {
     const val PLACEHOLDER_ID = "-1"
     val Empty = PostUiModel(PLACEHOLDER_ID, "", "", "", "")

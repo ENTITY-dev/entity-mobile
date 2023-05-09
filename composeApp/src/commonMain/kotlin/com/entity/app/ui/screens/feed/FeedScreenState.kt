@@ -10,6 +10,10 @@ sealed interface FeedScreenState {
     val canLoadMore: Boolean,
   ) : FeedScreenState
 
+  data class Error(
+    val errorText: String,
+  ) : FeedScreenState
+
   object EMPTY : FeedScreenState
 
   object LOADING : FeedScreenState
