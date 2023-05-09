@@ -86,7 +86,7 @@ fun EntityTheme(
 
   val shapes = EntityShape(
     small = RoundedCornerShape(0.dp),
-    medium = RoundedCornerShape(16.dp),
+    medium = RoundedCornerShape(4.dp),
     big = RoundedCornerShape(20.dp)
   )
 

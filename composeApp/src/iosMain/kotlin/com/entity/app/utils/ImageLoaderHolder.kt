@@ -2,18 +2,13 @@ package com.entity.app.utils
 
 import androidx.compose.ui.unit.Density
 import com.seiko.imageloader.ImageLoader
-import com.seiko.imageloader.component.ComponentRegistryBuilder
-import com.seiko.imageloader.component.decoder.Decoder.Factory
-import com.seiko.imageloader.component.decoder.GifDecoder
-import com.seiko.imageloader.component.decoder.SkiaImageDecoder
-import com.seiko.imageloader.component.decoder.SvgDecoder
-import com.seiko.imageloader.component.setupCommonComponents
+import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents
-import com.seiko.imageloader.component.setupKtorComponents
-import com.seiko.imageloader.intercept.InterceptorsBuilder
 import io.ktor.client.HttpClient
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import okio.Path.Companion.toPath
+import platform.Foundation.NSCachesDirectory
+import platform.Foundation.NSFileManager
+import platform.Foundation.NSUserDomainMask
 
 fun generateImageLoader(httpClient: HttpClient): ImageLoader {
   return ImageLoader {
@@ -21,7 +16,24 @@ fun generateImageLoader(httpClient: HttpClient): ImageLoader {
       setupDefaultComponents { httpClient }
     }
     interceptor {
+      memoryCacheConfig {
+        // Set the max size to 25% of the app's available memory.
+        maxSizePercent(0.25)
+      }
+      diskCacheConfig {
+        directory(getCacheDir().toPath().resolve("image_cache"))
+        maxSizeBytes(512L * 1024 * 1024)
+      }
       useDefaultInterceptors = true
     }
   }
+}
+private fun getCacheDir(): String {
+  return NSFileManager.defaultManager.URLForDirectory(
+    NSCachesDirectory,
+    NSUserDomainMask,
+    null,
+    true,
+    null,
+  )!!.path.orEmpty()
 }

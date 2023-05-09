@@ -29,7 +29,7 @@ val baseDarkPalette = EntityColors(
 )
 
 val shimmerColorShades = listOf(
-  Color.LightGray.copy(0.9f),
-  Color.LightGray.copy(0.2f),
-  Color.LightGray.copy(0.9f)
+  Color(0xCC7A8A99).copy(0.9f),
+  Color(0xCC7A8A99).copy(0.2f),
+  Color(0xCC7A8A99).copy(0.9f)
 )
