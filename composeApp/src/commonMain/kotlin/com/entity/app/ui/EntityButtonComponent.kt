@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
@@ -26,6 +27,7 @@ import com.entity.app.ui.theme.EntityTheme
 fun EntityButtonComponent(
   modifier: Modifier = Modifier,
   text: String,
+  enabled: Boolean = true,
   onClick: () -> Unit,
 ) {
 
@@ -45,12 +47,23 @@ fun EntityButtonComponent(
       ),
     onClick = onClick,
     interactionSource = interactionSource,
-    border = BorderStroke(1.dp, EntityTheme.colors().bgControlMain),
+    border = BorderStroke(
+      1.dp, if (enabled) EntityTheme.colors().bgControlMain else EntityTheme.colors().bgControlMain.copy(
+        ContentAlpha.disabled
+      )
+    ),
     colors = ButtonDefaults.buttonColors(
       backgroundColor = Color.Black,
       disabledBackgroundColor = Color.Black
-    )
+    ),
+    enabled = enabled
   ) {
-    Text(text = text, style = EntityTheme.typography().title, color = EntityTheme.colors().mainText)
+    Text(
+      text = text,
+      style = EntityTheme.typography().title,
+      color = if (enabled) EntityTheme.colors().mainText else EntityTheme.colors().mainText.copy(
+        ContentAlpha.disabled
+      )
+    )
   }
 }

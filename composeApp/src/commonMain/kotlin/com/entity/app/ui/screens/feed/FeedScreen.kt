@@ -109,7 +109,8 @@ class FeedScreen : Screen {
         modifier = Modifier
           .fillMaxWidth()
           .padding(32.dp),
-        "Refresh",
+        text = "Refresh",
+        enabled = true,
         onRefresh
       )
     }
