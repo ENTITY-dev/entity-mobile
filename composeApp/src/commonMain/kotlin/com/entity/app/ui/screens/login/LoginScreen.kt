@@ -33,6 +33,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.entity.app.ui.EntityButtonComponent
+import com.entity.app.ui.screens.feed.FeedScreen
+import com.entity.app.ui.screens.login.LoginScreenAction.AuthSuccess
 import com.entity.app.ui.screens.login.LoginScreenEvent.PasswordChange
 import com.entity.app.ui.screens.login.LoginScreenEvent.UsernameChange
 import com.entity.app.ui.screens.login.LoginScreenViewState.Normal
@@ -124,6 +126,16 @@ class LoginScreen : Screen {
             screenModel.obtainEvent(LoginScreenEvent.OnRegistrationClick)
           }
         }
+      }
+    }
+
+    when (val action = viewAction) {
+      AuthSuccess -> {
+        navigator.replace(FeedScreen())
+      }
+
+      null -> {
+        //no-op
       }
     }
   }

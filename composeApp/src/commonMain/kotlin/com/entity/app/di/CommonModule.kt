@@ -1,7 +1,11 @@
 package com.entity.app.di
 
 import com.entity.app.utils.HttpEngineFactory
-import com.entity.app.data.FeedListRepository
+import com.entity.app.data.repository.FeedListRepository
+import com.entity.app.data.interacotor.UserSettingsInteractor
+import com.entity.app.data.api.FeedListApi
+import com.entity.app.data.api.UserSettingsApi
+import com.entity.app.data.repository.UserSettingsRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpTimeout
@@ -16,15 +20,23 @@ import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-private const val DEFAULT_HOST = "entity.lol"
+private const val DEFAULT_HOST = "entity.lol/backend"
 private const val CONNECT_TIMEOUT_MS = 15000L
 private const val REQUEST_TIMEOUT_MS = 5000L
 
 val commonModule = module {
   singleOf(::FeedListRepository)
+  singleOf(::UserSettingsRepository)
+
+  singleOf(::FeedListApi)
+  singleOf(::UserSettingsApi)
+
+
+  factoryOf(::UserSettingsInteractor)
 
   single {
     HttpClient(HttpEngineFactory().createEngine()) {
@@ -48,7 +60,7 @@ val commonModule = module {
 
       defaultRequest {
         url {
-          protocol = URLProtocol.HTTP
+          protocol = URLProtocol.HTTPS
           host = DEFAULT_HOST
         }
         contentType(ContentType.Application.Json)

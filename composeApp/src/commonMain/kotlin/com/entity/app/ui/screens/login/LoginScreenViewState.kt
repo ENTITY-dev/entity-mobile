@@ -7,7 +7,7 @@ sealed interface LoginScreenViewState {
     val password: String,
     val notificationText: String,
     val isLoading: Boolean,
-  ): LoginScreenViewState
+  ) : LoginScreenViewState
 
 
 }

@@ -1,18 +1,14 @@
-package com.entity.app.data
+package com.entity.app.data.repository
 
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.forms.formData
-import io.ktor.client.request.get
-import io.ktor.client.request.headers
-import io.ktor.client.request.parameter
-import io.ktor.client.request.url
+import com.entity.app.data.model.AuthorResponseModel
+import com.entity.app.data.model.PostResponseModel
+import com.entity.app.data.api.FeedListApi
 import kotlinx.coroutines.delay
 import kotlin.jvm.Volatile
 
 
 class FeedListRepository constructor(
-  private val client: HttpClient,
+  private val feedListApi: FeedListApi
 ) {
 
   private val cachedFeedPostResponseModels: MutableList<PostResponseModel> = mutableListOf()
@@ -24,14 +20,7 @@ class FeedListRepository constructor(
     val canLoadMore = cachedFeedPostResponseModels.size < maxFeedModelsCount
     if (shouldMakeRequest(loadMore, canLoadMore)) {
       val skipValue = cachedFeedPostResponseModels.size
-      val response: ScenesResponseModel = client.get {
-        url(URL_SCENES)
-        headers { }
-        formData {
-          parameter(LIMIT_PARAM, LIMIT_VALUE)
-          parameter(SKIP_PARAM, skipValue)
-        }
-      }.body()
+      val response = feedListApi.getFeedPostResponseModels(skipValue)
       val feedPostResponseModels = response.items
       maxFeedModelsCount = response.maxCount
       cachedFeedPostResponseModels.addAll(feedPostResponseModels)
@@ -72,10 +61,6 @@ class FeedListRepository constructor(
   )
 
   private companion object {
-    const val URL_SCENES = "/backend/scenes"
-    const val LIMIT_PARAM = "limit"
-    const val LIMIT_VALUE = 10
-    const val SKIP_PARAM = "skip"
     val testList = listOf(
       PostResponseModel(
         id = "1",
