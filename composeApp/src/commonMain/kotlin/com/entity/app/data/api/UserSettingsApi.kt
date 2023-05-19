@@ -41,8 +41,8 @@ class UserSettingsApi constructor(
   }
 
   private companion object {
-    const val URL_AUTH = "/auth/login"
-    const val URL_REGISTER = "/auth/register"
+    const val URL_AUTH = "/backend/auth/login"
+    const val URL_REGISTER = "/backend/auth/register"
     const val USERNAME_PARAM = "username"
     const val NAME_PARAM = "name"
     const val PASSWORD_PARAM = "password"

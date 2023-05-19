@@ -24,7 +24,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-private const val DEFAULT_HOST = "entity.lol/backend"
+private const val DEFAULT_HOST = "entity.lol"
 private const val CONNECT_TIMEOUT_MS = 15000L
 private const val REQUEST_TIMEOUT_MS = 5000L
 

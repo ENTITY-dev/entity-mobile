@@ -14,7 +14,7 @@ import com.entity.app.ui.theme.EntityTheme
 internal fun App() = EntityTheme(
   darkTheme = true
 ) {
-  Navigator(LoginScreen()) { navigator ->
+  Navigator(FeedScreen()) { navigator ->
     Scaffold(
       backgroundColor = EntityTheme.colors().bgMain,
       topBar = { /* ... */ },
