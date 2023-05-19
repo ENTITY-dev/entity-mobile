@@ -4,7 +4,6 @@ import com.entity.app.data.model.Tokens
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
 import com.russhwolf.settings.set
-import io.github.xxfast.kstore.KStore
 
 class UserSettingsRepository {
 

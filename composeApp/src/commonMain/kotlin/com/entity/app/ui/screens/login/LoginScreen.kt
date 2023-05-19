@@ -131,7 +131,7 @@ class LoginScreen : Screen {
 
     when (val action = viewAction) {
       AuthSuccess -> {
-        navigator.replace(FeedScreen())
+        navigator.replace(FeedScreen)
       }
 
       null -> {
