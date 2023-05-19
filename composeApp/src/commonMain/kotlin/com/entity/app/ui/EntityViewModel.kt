@@ -10,7 +10,7 @@ abstract class EntityViewModel<State, Event, Action>(initialState: State) : Stat
 
   private val _viewStates = mutableState
 
-  private val _viewActions = MutableSharedFlow<Action?>(replay = 1, onBufferOverflow = DROP_OLDEST)
+  private val _viewActions = MutableSharedFlow<Action?>(extraBufferCapacity = 1, onBufferOverflow = DROP_OLDEST)
 
   fun viewStates() = state
 

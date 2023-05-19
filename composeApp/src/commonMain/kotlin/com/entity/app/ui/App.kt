@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import com.entity.app.ui.screens.feed.FeedScreen
+import com.entity.app.ui.screens.login.LoginScreen
 import com.entity.app.ui.theme.EntityTheme
 
 @Composable

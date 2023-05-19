@@ -2,24 +2,12 @@ package com.entity.app.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.koin.core.component.inject
 import androidx.compose.ui.unit.sp
-import com.entity.app.data.FeedListRepository
-import com.entity.app.ui.theme.LocalEntityShape
-import com.entity.app.ui.theme.LocalEntityTypography
-import com.entity.app.ui.theme.SirenSize
-import com.entity.app.ui.theme.baseDarkPalette
-import com.entity.app.ui.theme.baseLightPalette
 import com.entity.app.ui.theme.SirenSize.Big
 import com.entity.app.ui.theme.SirenSize.Medium
 import com.entity.app.ui.theme.SirenSize.Small

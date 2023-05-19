@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.entity.app.ui.theme.EntityTheme
 
 @Composable
 fun RippleTransparentButton(
@@ -33,12 +32,7 @@ fun RippleTransparentButton(
       backgroundColor = Color.Transparent,
       disabledBackgroundColor = Color.Transparent,
     ),
-    modifier = modifier.indication(
-      interactionSource = interactionSource,
-      indication = rememberRipple(
-        color = rippleColor
-      )
-    ),
+    modifier = modifier,
     interactionSource = interactionSource,
     content = content
   )

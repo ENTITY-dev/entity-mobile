@@ -2,16 +2,14 @@ package com.entity.app.ui.screens.feed
 
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.entity.app.utils.DateTimeKtx
-import com.entity.app.data.FeedListRepository
-import com.entity.app.data.PostResponseModel
+import com.entity.app.data.repository.FeedListRepository
+import com.entity.app.data.model.PostResponseModel
 import com.entity.app.ui.EntityViewModel
 import com.entity.app.ui.screens.feed.FeedScreenAction.OpenWebViewer
 import com.entity.app.ui.screens.feed.FeedScreenEvent.ViewAppear
 import com.entity.app.ui.screens.feed.FeedScreenState.Result
-import com.entity.app.ui.screens.feed.PostUiModel.Companion.PLACEHOLDER_ID
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
@@ -74,7 +72,7 @@ class FeedScreenViewModel :
     viewState = FeedScreenState.LOADING
     updateFeedJob = coroutineScope.launch {
       viewState = try {
-        val response = feedListRepository.getTestFeedPostResponseModels(loadMore = false)
+        val response = feedListRepository.getFeedPostResponseModels(loadMore = false)
         val uiModels = response.models.map {
           mapResponseToUiModels(it)
         }
@@ -106,7 +104,7 @@ class FeedScreenViewModel :
     )
     updateFeedJob = coroutineScope.launch {
       viewState = try {
-        val response = feedListRepository.getTestFeedPostResponseModels(loadMore = true)
+        val response = feedListRepository.getFeedPostResponseModels(loadMore = true)
         val uiModels = response.models.map {
           mapResponseToUiModels(it)
         }
