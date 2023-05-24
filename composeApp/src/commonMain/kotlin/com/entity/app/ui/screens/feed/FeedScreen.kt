@@ -33,6 +33,7 @@ import com.entity.app.ui.screens.feed.FeedScreenState.EMPTY
 import com.entity.app.ui.screens.feed.FeedScreenState.Error
 import com.entity.app.ui.screens.feed.FeedScreenState.LOADING
 import com.entity.app.ui.screens.feed.FeedScreenState.Result
+import com.entity.app.ui.screens.scene.SceneViewerScreen
 import com.entity.app.ui.theme.EntityTheme
 import kotlinx.coroutines.flow.collect
 
@@ -75,7 +76,7 @@ class FeedScreen : Screen {
 
     when (viewAction) {
       is OpenWebViewer -> {
-
+        navigator.push(SceneViewerScreen("https://google.com"))
       }
 
       else -> {}
