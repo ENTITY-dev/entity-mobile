@@ -48,6 +48,9 @@ kotlin {
         implementation(libs.napier)
         implementation(libs.kotlinx.coroutines.core)
         implementation(libs.ktor.core)
+        implementation(libs.ktor.client.content.negotiation)
+        implementation(libs.ktor.serialization)
+        implementation(libs.ktor.client.logging)
         implementation(libs.composeIcons.featherIcons)
         implementation(libs.kotlinx.serialization.json)
         implementation(libs.kotlinx.datetime)
@@ -55,13 +58,8 @@ kotlin {
         implementation(libs.multiplatformSettings.serialization)
         implementation(libs.multiplatformSettings.noArg)
         implementation(libs.koin.core)
-        implementation(libs.koin.core)
         implementation(libs.kstore)
         implementation(libs.apollo.runtime)
-
-        implementation("io.ktor:ktor-client-content-negotiation:2.2.4")
-        implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.4")
-        implementation("io.ktor:ktor-client-logging:2.2.4")
       }
     }
 
@@ -79,7 +77,7 @@ kotlin {
         implementation(libs.kotlinx.coroutines.android)
         implementation(libs.ktor.client.okhttp)
         implementation(libs.sqlDelight.driver.android)
-        implementation("io.insert-koin:koin-android:3.3.2")
+        implementation(libs.koin.android)
       }
     }
 
