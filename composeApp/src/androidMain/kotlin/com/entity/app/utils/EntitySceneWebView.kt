@@ -1,6 +1,7 @@
 package com.entity.app.utils
 
 import android.annotation.SuppressLint
+import android.view.MotionEvent
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
@@ -10,11 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
+import com.entity.app.ui.screens.scene.SceneWebApi
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 actual fun EntitySceneWebView(modifier: Modifier, url: String) {
   AndroidView(factory = {
+    WebView.setWebContentsDebuggingEnabled(true)
     val webView = WebView(it).apply {
       layoutParams = ViewGroup.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -33,7 +36,7 @@ actual fun EntitySceneWebView(modifier: Modifier, url: String) {
         }
       }
       settings.javaScriptEnabled = true
-//      addJavascriptInterface(SceneWebApiAndroid(context), SceneWebApi.NAME)
+      addJavascriptInterface(SceneWebApiAndroid(context), SceneWebApi.NAME)
       visibility = INVISIBLE
       loadUrl(url)
     }

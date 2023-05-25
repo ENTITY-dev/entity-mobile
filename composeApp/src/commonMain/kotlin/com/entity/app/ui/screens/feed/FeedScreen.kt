@@ -74,9 +74,9 @@ class FeedScreen : Screen {
       }
     }
 
-    when (viewAction) {
+    when (val action = viewAction) {
       is OpenWebViewer -> {
-        navigator.push(SceneViewerScreen("https://google.com"))
+        navigator.push(SceneViewerScreen(action.sceneId))
       }
 
       else -> {}

@@ -10,6 +10,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.entity.app.di.ENTITY_DEFAULT_HOST
 import com.entity.app.utils.EntitySceneWebView
 
 class SceneViewerScreen(
@@ -40,5 +41,6 @@ class SceneViewerScreen(
 
 @Composable
 private fun SceneViewer(sceneId: String) {
-  EntitySceneWebView(Modifier.fillMaxSize(), sceneId)
+  val url = "https://${ENTITY_DEFAULT_HOST}/scenes/${sceneId}/embed"
+  EntitySceneWebView(Modifier.fillMaxSize(), url)
 }
