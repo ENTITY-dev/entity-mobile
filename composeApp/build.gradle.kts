@@ -27,8 +27,9 @@ kotlin {
     version = "1.0.0"
     summary = "Compose application framework"
     homepage = "empty"
-    ios.deploymentTarget = "11.0"
+    ios.deploymentTarget = "14.1"
     podfile = project.file("../iosApp/Podfile")
+    pod("Sentry", "~> 8.4.0")
     framework {
       baseName = "ComposeApp"
       isStatic = true
@@ -38,6 +39,7 @@ kotlin {
   sourceSets {
     val commonMain by getting {
       dependencies {
+        api(libs.sentry)
         implementation(compose.runtime)
         implementation(compose.foundation)
         implementation(compose.material)

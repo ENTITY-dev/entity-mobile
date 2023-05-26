@@ -3,12 +3,14 @@ package com.entity.app.ui
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import com.entity.app.ui.screens.feed.FeedScreen
 import com.entity.app.ui.screens.login.LoginScreen
 import com.entity.app.ui.theme.EntityTheme
+import io.sentry.kotlin.multiplatform.Sentry
 
 @Composable
 internal fun App() = EntityTheme(
@@ -22,5 +24,8 @@ internal fun App() = EntityTheme(
       bottomBar = { /* ... */ },
       modifier = Modifier.fillMaxSize()
     )
+  }
+  LaunchedEffect(Unit) {
+    Sentry.captureMessage("Application started")
   }
 }
