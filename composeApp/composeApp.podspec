@@ -8,8 +8,8 @@ Pod::Spec.new do |spec|
     spec.summary                  = 'Compose application framework'
     spec.vendored_frameworks      = 'build/cocoapods/framework/ComposeApp.framework'
     spec.libraries                = 'c++'
-    spec.ios.deployment_target = '11.0'
-                
+    spec.ios.deployment_target = '14.1'
+    spec.dependency 'Sentry', '~> 8.4.0'
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':composeApp',

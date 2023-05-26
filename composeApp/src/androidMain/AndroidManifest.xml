@@ -9,6 +9,9 @@
       android:label="Entity"
       android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
       android:usesCleartextTraffic="true">
+    <meta-data
+        android:name="io.sentry.auto-init"
+        android:value="false" />
     <activity
         android:name=".ui.MainActivity"
         android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"

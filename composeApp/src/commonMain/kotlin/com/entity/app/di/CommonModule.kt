@@ -24,7 +24,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-private const val DEFAULT_HOST = "entity.lol"
+const val ENTITY_DEFAULT_HOST = "entity.lol"
 private const val CONNECT_TIMEOUT_MS = 15000L
 private const val REQUEST_TIMEOUT_MS = 5000L
 
@@ -61,7 +61,7 @@ val commonModule = module {
       defaultRequest {
         url {
           protocol = URLProtocol.HTTPS
-          host = DEFAULT_HOST
+          host = ENTITY_DEFAULT_HOST
         }
         contentType(ContentType.Application.Json)
       }

@@ -7,6 +7,8 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.core.screen.Screen
@@ -22,6 +24,7 @@ import com.entity.app.ui.theme.EntityTheme
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Airplay
 import compose.icons.feathericons.List
+import io.sentry.kotlin.multiplatform.Sentry
 
 @Composable
 internal fun App() = EntityTheme(
@@ -41,7 +44,9 @@ internal fun App() = EntityTheme(
       }
     )
   }
-
+  LaunchedEffect(Unit) {
+    Sentry.captureMessage("Application started")
+  }
 }
 
 object MainScreen: Screen {

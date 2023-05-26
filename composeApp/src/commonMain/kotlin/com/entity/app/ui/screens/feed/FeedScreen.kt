@@ -38,6 +38,7 @@ import com.entity.app.ui.screens.feed.FeedScreenState.EMPTY
 import com.entity.app.ui.screens.feed.FeedScreenState.Error
 import com.entity.app.ui.screens.feed.FeedScreenState.LOADING
 import com.entity.app.ui.screens.feed.FeedScreenState.Result
+import com.entity.app.ui.screens.scene.SceneViewerScreen
 import com.entity.app.ui.theme.EntityTheme
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Home
@@ -97,9 +98,9 @@ object FeedScreen : Tab {
       }
     }
 
-    when (viewAction) {
+    when (val action = viewAction) {
       is OpenWebViewer -> {
-
+        navigator.push(SceneViewerScreen(action.sceneId))
       }
 
       else -> {}
