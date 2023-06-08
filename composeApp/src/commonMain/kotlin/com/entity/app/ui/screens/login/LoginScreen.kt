@@ -1,6 +1,5 @@
 package com.entity.app.ui.screens.login
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,41 +9,30 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Modifier.Companion
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.entity.app.ui.EntityButtonComponent
-import com.entity.app.ui.screens.feed.FeedScreen
 import com.entity.app.ui.screens.login.LoginScreenAction.AuthSuccess
 import com.entity.app.ui.screens.login.LoginScreenEvent.PasswordChange
 import com.entity.app.ui.screens.login.LoginScreenEvent.UsernameChange
 import com.entity.app.ui.screens.login.LoginScreenViewState.Normal
 import com.entity.app.ui.theme.EntityTheme
-import kotlin.math.sin
 
-class LoginScreen : Screen {
+object LoginScreen : Screen {
   @Composable
   override fun Content() {
-    val navigator = LocalNavigator.currentOrThrow
     val screenModel = rememberScreenModel { LoginScreenViewModel() }
     val viewState by screenModel.viewStates().collectAsState()
     val viewAction by screenModel.viewActions().collectAsState(null)
@@ -52,11 +40,11 @@ class LoginScreen : Screen {
     when (val state = viewState) {
       is Normal -> {
         Column(
-          modifier = Modifier.fillMaxSize().background(EntityTheme.colors().bgMain).padding(horizontal = 16.dp),
+          modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
           verticalArrangement = Arrangement.Center,
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
-          Text("Entity", color = EntityTheme.colors().mainText, fontSize = 48.sp)
+          Text("ENTITY", color = EntityTheme.colors().mainText, fontSize = 48.sp)
 
           val colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = EntityTheme.colors().mainText,
@@ -130,9 +118,7 @@ class LoginScreen : Screen {
     }
 
     when (val action = viewAction) {
-      AuthSuccess -> {
-        navigator.replace(FeedScreen())
-      }
+      AuthSuccess -> { }
 
       null -> {
         //no-op

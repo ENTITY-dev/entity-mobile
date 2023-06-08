@@ -1,13 +1,13 @@
 package com.entity.app.ui.screens.feed
 
 import cafe.adriel.voyager.core.model.coroutineScope
-import com.entity.app.utils.DateTimeKtx
-import com.entity.app.data.repository.FeedListRepository
 import com.entity.app.data.model.PostResponseModel
+import com.entity.app.data.repository.FeedListRepository
 import com.entity.app.ui.EntityViewModel
 import com.entity.app.ui.screens.feed.FeedScreenAction.OpenWebViewer
 import com.entity.app.ui.screens.feed.FeedScreenEvent.ViewAppear
 import com.entity.app.ui.screens.feed.FeedScreenState.Result
+import com.entity.app.utils.DateTimeKtx
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -23,6 +23,10 @@ class FeedScreenViewModel :
 
   private var updateFeedJob: Job? = null
 
+  init {
+    loadFeed()
+  }
+
   override fun obtainEvent(viewEvent: FeedScreenEvent) {
     when (viewEvent) {
       FeedScreenEvent.RefreshFeedListScreen -> {
@@ -35,7 +39,6 @@ class FeedScreenViewModel :
       }
 
       ViewAppear -> {
-        loadFeed()
       }
 
       is FeedScreenEvent.SceneClick -> {

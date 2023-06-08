@@ -46,6 +46,8 @@ kotlin {
         implementation(libs.libres)
         implementation(libs.voyager.navigator)
         implementation(libs.voyager.transitions)
+        implementation(libs.voyager.bottom)
+        implementation(libs.voyager.tab)
         implementation(libs.composeImageLoader)
         implementation(libs.napier)
         implementation(libs.kotlinx.coroutines.core)
@@ -80,6 +82,7 @@ kotlin {
         implementation(libs.ktor.client.okhttp)
         implementation(libs.sqlDelight.driver.android)
         implementation(libs.koin.android)
+        implementation(libs.accompanist.systemuicontroller)
       }
     }
 
@@ -143,7 +146,6 @@ buildConfig {
   // BuildConfig configuration here.
   // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
 }
-
 sqldelight {
   databases {
     create("MyDatabase") {
