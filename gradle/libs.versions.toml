@@ -22,6 +22,7 @@ kstore = "0.5.0"
 sqlDelight = "2.0.0-alpha05"
 apollo = "3.8.0"
 sentry = "0.2.0"
+accompanist = "0.30.1"
 
 [libraries]
 
@@ -58,6 +59,7 @@ sqlDelight-driver-native = { module = "app.cash.sqldelight:native-driver", versi
 sqlDelight-driver-sqljs = { module = "app.cash.sqldelight:sqljs-driver", version.ref = "sqlDelight" }
 apollo-runtime = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
 sentry = { module = "io.sentry:sentry-kotlin-multiplatform", version.ref = "sentry" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 [plugins]
 
