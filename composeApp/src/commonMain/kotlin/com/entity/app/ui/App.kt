@@ -1,6 +1,11 @@
 package com.entity.app.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -11,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
@@ -50,9 +56,17 @@ internal fun App() = EntityTheme(
     }
   ) {
     Scaffold(
-      content = { CurrentTab() },
+      content = {
+        Box(modifier = Modifier.padding(it)) {
+          CurrentTab()
+        }
+      },
       bottomBar = {
-        if (bottomBarIsVisible) {
+        AnimatedVisibility(
+          bottomBarIsVisible,
+          enter = slideInVertically(initialOffsetY = { it }),
+          exit = slideOutVertically(targetOffsetY = { 0 })
+        ) {
           BottomNavigation(
             backgroundColor = EntityTheme.colors().bgMain,
             contentColor = EntityTheme.colors().mainText

@@ -20,7 +20,7 @@ fun RippleTransparentButton(
 ) {
   val interactionSource = remember { MutableInteractionSource() }
   Button(
-    onClick = debounced(onClick),
+    onClick = onClick,
     contentPadding = contentPadding,
     elevation = null,
     colors = ButtonDefaults.buttonColors(

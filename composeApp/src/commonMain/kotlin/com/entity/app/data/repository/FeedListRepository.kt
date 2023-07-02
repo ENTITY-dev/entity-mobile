@@ -1,7 +1,7 @@
 package com.entity.app.data.repository
 
-import com.entity.app.data.model.PostResponseModel
 import com.entity.app.data.api.FeedListApi
+import com.entity.app.data.model.PostResponseModel
 import kotlin.jvm.Volatile
 
 
@@ -18,7 +18,7 @@ class FeedListRepository constructor(
     val canLoadMore = cachedFeedPostResponseModels.size < maxFeedModelsCount
     if (shouldMakeRequest(loadMore, canLoadMore)) {
       val skipValue = cachedFeedPostResponseModels.size
-      val response = feedListApi.getFeedPostResponseModels(skipValue)
+      val response = feedListApi.getTestFeedPostResponseModels(skipValue)
       val feedPostResponseModels = response.items
       maxFeedModelsCount = response.maxCount
       cachedFeedPostResponseModels.addAll(feedPostResponseModels)
