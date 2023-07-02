@@ -33,7 +33,9 @@ import com.entity.app.ui.theme.EntityTheme
 object LoginScreen : Screen {
   @Composable
   override fun Content() {
-    val screenModel = rememberScreenModel { LoginScreenViewModel() }
+    val screenModel = rememberScreenModel {
+      LoginScreenViewModel()
+    }
     val viewState by screenModel.viewStates().collectAsState()
     val viewAction by screenModel.viewActions().collectAsState(null)
 

@@ -8,8 +8,6 @@ import com.entity.app.ui.screens.login.LoginScreenEvent.OnRegistrationClick
 import com.entity.app.ui.screens.login.LoginScreenEvent.PasswordChange
 import com.entity.app.ui.screens.login.LoginScreenEvent.UsernameChange
 import com.entity.app.ui.screens.login.LoginScreenViewState.Normal
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -22,6 +20,10 @@ class LoginScreenViewModel :
   EntityViewModel<LoginScreenViewState, LoginScreenEvent, LoginScreenAction>(LoginScreenInitialState), KoinComponent {
 
   private val userSettingsInteractor: UserSettingsInteractor by inject()
+
+  init {
+    viewState = LoginScreenInitialState
+  }
 
   override fun obtainEvent(viewEvent: LoginScreenEvent) {
     when (viewEvent) {
@@ -53,6 +55,7 @@ class LoginScreenViewModel :
       val password = state.password.trim()
       try {
         userSettingsInteractor.authUser(username, password)
+        viewState = state.copy(isLoading = false)
         viewAction = LoginScreenAction.AuthSuccess
       } catch (e: Exception) {
         viewState = state.copy(isLoading = false, notificationText = e.message ?: "")
@@ -69,6 +72,7 @@ class LoginScreenViewModel :
       val name = state.username.trim()
       try {
         userSettingsInteractor.registerUser(username, password, name)
+        viewState = state.copy(isLoading = false)
         viewAction = LoginScreenAction.AuthSuccess
       } catch (e: Exception) {
         viewState = state.copy(isLoading = false, notificationText = e.message ?: "")
