@@ -19,8 +19,6 @@ data class PostResponseModel(
   val name: String,
   @SerialName("status")
   val status: String,
-  @SerialName("_authorId")
-  val authorId: String,
   @SerialName("_createdAt")
   val createdAt: String,
   @SerialName("author")

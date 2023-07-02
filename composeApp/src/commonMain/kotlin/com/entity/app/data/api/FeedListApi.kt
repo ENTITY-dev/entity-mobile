@@ -48,7 +48,6 @@ class FeedListApi constructor(
         scenePreviewUrl = "https://i.pinimg.com/originals/c1/5b/eb/c15beb5770999f05679d4133f408c462.jpg",
         viewsCount = 300,
         createdAt = "2022-06-17T12:34:56+00:00",
-        authorId = "",
         author = AuthorResponseModel(
           id = "",
           name = "andreyb0y",
@@ -66,7 +65,6 @@ class FeedListApi constructor(
         scenePreviewUrl = "https://i.pinimg.com/originals/c1/5b/eb/c15beb5770999f05679d4133f408c462.jpg",
         viewsCount = 300,
         createdAt = "2022-06-17T12:34:56+00:00",
-        authorId = "",
         author = AuthorResponseModel(
           id = "",
           name = "andreyb0y",
@@ -83,7 +81,6 @@ class FeedListApi constructor(
         scenePreviewUrl = "https://i.pinimg.com/originals/c1/5b/eb/c15beb5770999f05679d4133f408c462.jpg",
         viewsCount = 300,
         createdAt = "2022-06-17T12:34:56+00:00",
-        authorId = "",
         author = AuthorResponseModel(
           id = "",
           name = "andreyb0y",

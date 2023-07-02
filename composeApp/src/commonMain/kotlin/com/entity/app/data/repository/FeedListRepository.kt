@@ -18,7 +18,7 @@ class FeedListRepository constructor(
     val canLoadMore = cachedFeedPostResponseModels.size < maxFeedModelsCount
     if (shouldMakeRequest(loadMore, canLoadMore)) {
       val skipValue = cachedFeedPostResponseModels.size
-      val response = feedListApi.getTestFeedPostResponseModels(skipValue)
+      val response = feedListApi.getFeedPostResponseModels(skipValue)
       val feedPostResponseModels = response.items
       maxFeedModelsCount = response.maxCount
       cachedFeedPostResponseModels.addAll(feedPostResponseModels)
