@@ -21,10 +21,6 @@ class LoginScreenViewModel :
 
   private val userSettingsInteractor: UserSettingsInteractor by inject()
 
-  init {
-    viewState = LoginScreenInitialState
-  }
-
   override fun obtainEvent(viewEvent: LoginScreenEvent) {
     when (viewEvent) {
       is UsernameChange -> {

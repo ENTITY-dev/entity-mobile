@@ -55,6 +55,7 @@ kotlin {
         implementation(libs.ktor.client.content.negotiation)
         implementation(libs.ktor.serialization)
         implementation(libs.ktor.client.logging)
+        implementation(libs.ktor.client.auth)
         implementation(libs.composeIcons.featherIcons)
         implementation(libs.kotlinx.serialization.json)
         implementation(libs.kotlinx.datetime)
@@ -117,7 +118,7 @@ android {
   compileSdk = 33
 
   defaultConfig {
-    minSdk = 21
+    minSdk = 24
     targetSdk = 33
 
     applicationId = "com.entity.app.androidApp"

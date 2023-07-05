@@ -7,7 +7,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.client.request.url
 import kotlinx.coroutines.delay
@@ -18,7 +17,6 @@ class FeedListApi constructor(
   suspend fun getFeedPostResponseModels(skipValue: Int): ScenesResponseModel {
     val response: ScenesResponseModel = client.get {
       url(URL_SCENES)
-      headers { }
       formData {
         parameter(LIMIT_PARAM, LIMIT_VALUE)
         parameter(SKIP_PARAM, skipValue)

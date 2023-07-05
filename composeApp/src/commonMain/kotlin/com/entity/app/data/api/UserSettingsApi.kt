@@ -1,15 +1,11 @@
 package com.entity.app.data.api
 
-import com.entity.app.data.model.ScenesResponseModel
-import com.entity.app.data.model.TokensResponseModel
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.forms.formData
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerAuthProvider
+import io.ktor.client.plugins.plugin
 import io.ktor.client.request.forms.submitForm
-import io.ktor.client.request.headers
-import io.ktor.client.request.parameter
-import io.ktor.client.request.post
-import io.ktor.client.request.url
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.Parameters
 import io.ktor.http.contentType
@@ -18,34 +14,44 @@ class UserSettingsApi constructor(
   private val client: HttpClient,
 ) {
 
-  suspend fun postAuthUser(userName: String, password: String): TokensResponseModel {
-    val response: TokensResponseModel = client.submitForm(url = URL_AUTH, formParameters = Parameters.build {
+  private val bearerAuthProvider = client.plugin(Auth).providers
+    .filterIsInstance<BearerAuthProvider>()
+    .first()
+
+  suspend fun postAuthUser(userName: String, password: String) {
+    val response = client.submitForm(url = URL_AUTH, formParameters = Parameters.build {
       append(USERNAME_PARAM, userName)
       append(PASSWORD_PARAM, password)
-    }) {
-      headers { }
-    }.body()
-    return response
+    })
+    refreshUserToken(response)
   }
 
-  suspend fun postRegisterUser(userName: String, password: String, name: String): TokensResponseModel {
-    val response: TokensResponseModel = client.submitForm(url = URL_REGISTER, formParameters = Parameters.build {
+  suspend fun postRegisterUser(userName: String, password: String, name: String) {
+    val response = client.submitForm(url = URL_REGISTER, formParameters = Parameters.build {
       append(USERNAME_PARAM, userName)
       append(NAME_PARAM, name)
       append(PASSWORD_PARAM, password)
     }) {
       contentType(ContentType.Application.Json)
-      headers { }
-    }.body()
-    return response
+    }
+    refreshUserToken(response)
   }
 
-  private companion object {
+  fun removeUserToken() {
+    bearerAuthProvider.clearToken()
+  }
+
+  private suspend fun refreshUserToken(response: HttpResponse) {
+    bearerAuthProvider.refreshToken(response)
+  }
+
+  companion object {
     const val URL_AUTH = "/backend/auth/login"
     const val URL_REGISTER = "/backend/auth/register"
-    const val USERNAME_PARAM = "username"
-    const val NAME_PARAM = "name"
-    const val PASSWORD_PARAM = "password"
+    const val URL_REFRESH = "backend/auth/refresh"
+    private const val USERNAME_PARAM = "username"
+    private const val NAME_PARAM = "name"
+    private const val PASSWORD_PARAM = "password"
   }
 
 }

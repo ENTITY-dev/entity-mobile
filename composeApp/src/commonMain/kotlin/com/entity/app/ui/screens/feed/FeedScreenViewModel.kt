@@ -1,8 +1,8 @@
 package com.entity.app.ui.screens.feed
 
 import cafe.adriel.voyager.core.model.coroutineScope
+import com.entity.app.data.interacotor.FeedListInteractor
 import com.entity.app.data.model.PostResponseModel
-import com.entity.app.data.repository.FeedListRepository
 import com.entity.app.ui.EntityViewModel
 import com.entity.app.ui.screens.feed.FeedScreenAction.OpenWebViewer
 import com.entity.app.ui.screens.feed.FeedScreenEvent.ViewAppear
@@ -17,25 +17,25 @@ import org.koin.core.component.inject
 class FeedScreenViewModel :
   EntityViewModel<FeedScreenState, FeedScreenEvent, FeedScreenAction>(initialState = FeedScreenState.EMPTY) {
 
-  private val feedListRepository: FeedListRepository by inject()
+  private val feedListInteractor: FeedListInteractor by inject()
 
   private val timeFormatter = DateTimeKtx()
 
   private var updateFeedJob: Job? = null
 
   init {
-    loadFeed()
+    loadFeedList()
   }
 
   override fun obtainEvent(viewEvent: FeedScreenEvent) {
     when (viewEvent) {
       FeedScreenEvent.RefreshFeedListScreen -> {
-        feedListRepository.clearCache()
-        loadFeed()
+        feedListInteractor.clearFeedList()
+        loadFeedList()
       }
 
       FeedScreenEvent.LoadNewPage -> {
-        increaseFeed()
+        increaseFeedList()
       }
 
       ViewAppear -> {
@@ -70,12 +70,12 @@ class FeedScreenViewModel :
     viewAction = OpenWebViewer(model.sceneId)
   }
 
-  private fun loadFeed() {
+  private fun loadFeedList() {
     updateFeedJob?.cancel()
     viewState = FeedScreenState.LOADING
     updateFeedJob = coroutineScope.launch {
       viewState = try {
-        val response = feedListRepository.getFeedPostResponseModels(loadMore = false)
+        val response = feedListInteractor.getFeedPostResponseModels(loadMore = false)
         val uiModels = response.models.map {
           mapResponseToUiModels(it)
         }
@@ -92,7 +92,7 @@ class FeedScreenViewModel :
     }
   }
 
-  private fun increaseFeed() {
+  private fun increaseFeedList() {
     if (updateFeedJob?.isActive == true) {
       return
     }
@@ -107,7 +107,7 @@ class FeedScreenViewModel :
     )
     updateFeedJob = coroutineScope.launch {
       viewState = try {
-        val response = feedListRepository.getFeedPostResponseModels(loadMore = true)
+        val response = feedListInteractor.getFeedPostResponseModels(loadMore = true)
         val uiModels = response.models.map {
           mapResponseToUiModels(it)
         }

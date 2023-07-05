@@ -12,7 +12,7 @@ composeImageLoader = "1.4.0"
 napier = "2.6.1"
 buildConfig = "3.1.0"
 kotlinx-coroutines = "1.6.4"
-ktor = "2.2.4"
+ktor = "2.3.2"
 composeIcons = "1.1.0"
 kotlinx-serialization = "1.5.0"
 kotlinx-datetime = "0.4.0"
@@ -44,6 +44,7 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 composeIcons-featherIcons = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "composeIcons" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }

@@ -1,8 +1,9 @@
 package com.entity.app.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.IntOffset
 import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
@@ -47,7 +49,7 @@ internal fun App() = EntityTheme(
   }
 
   TabNavigator(
-    feedTab,
+    tab = feedTab,
     tabDisposable = {
       TabDisposable(
         navigator = it,
@@ -55,28 +57,29 @@ internal fun App() = EntityTheme(
       )
     }
   ) {
-    Scaffold(
-      content = {
-        Box(modifier = Modifier.padding(it)) {
-          CurrentTab()
-        }
-      },
-      bottomBar = {
-        AnimatedVisibility(
-          bottomBarIsVisible,
-          enter = slideInVertically(initialOffsetY = { it }),
-          exit = slideOutVertically(targetOffsetY = { 0 })
+    Scaffold(content = {
+      Box(modifier = Modifier.padding(it)) {
+        CurrentTab()
+      }
+    }, bottomBar = {
+      AnimatedVisibility(
+        bottomBarIsVisible,
+        enter = slideInVertically(
+          animationSpec = spring(
+            stiffness = 500f,
+            visibilityThreshold = IntOffset.VisibilityThreshold
+          ),
+          initialOffsetY = { it }
+        )
+      ) {
+        BottomNavigation(
+          backgroundColor = EntityTheme.colors().bgMain, contentColor = EntityTheme.colors().mainText
         ) {
-          BottomNavigation(
-            backgroundColor = EntityTheme.colors().bgMain,
-            contentColor = EntityTheme.colors().mainText
-          ) {
-            TabNavigationItem(feedTab)
-            TabNavigationItem(UserTab)
-          }
+          TabNavigationItem(feedTab)
+          TabNavigationItem(UserTab)
         }
-      },
-      backgroundColor = EntityTheme.colors().bgMain
+      }
+    }, backgroundColor = EntityTheme.colors().bgMain
     )
   }
   LaunchedEffect(Unit) {

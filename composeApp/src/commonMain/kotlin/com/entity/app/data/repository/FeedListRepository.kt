@@ -4,9 +4,8 @@ import com.entity.app.data.api.FeedListApi
 import com.entity.app.data.model.PostResponseModel
 import kotlin.jvm.Volatile
 
-
 class FeedListRepository constructor(
-  private val feedListApi: FeedListApi
+  private val feedListApi: FeedListApi,
 ) {
 
   private val cachedFeedPostResponseModels: MutableList<PostResponseModel> = mutableListOf()

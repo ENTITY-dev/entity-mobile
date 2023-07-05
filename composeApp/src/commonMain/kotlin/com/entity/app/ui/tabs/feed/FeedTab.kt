@@ -1,9 +1,12 @@
 package com.entity.app.ui.tabs.feed
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.unit.IntOffset
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
@@ -36,7 +39,13 @@ internal data class FeedTab(
   override fun Content() {
     Navigator(FeedScreen) { navigator ->
       hideBottomNavigationCallback.invoke(navigator.lastItem !is SceneViewerScreen)
-      SlideTransition(navigator)
+      SlideTransition(
+        navigator,
+        animationSpec = spring(
+          stiffness = 500f,
+          visibilityThreshold = IntOffset.VisibilityThreshold
+        )
+      )
     }
   }
 }
