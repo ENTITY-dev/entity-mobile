@@ -8,49 +8,57 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.isVisible
 import com.entity.app.ui.screens.scene.SceneWebApi
+import io.github.aakira.napier.Napier
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-actual fun EntitySceneWebView(modifier: Modifier, url: String) {
-  AndroidView(factory = {
-    WebView.setWebContentsDebuggingEnabled(true)
-    val webView = WebView(it).apply {
-      layoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.MATCH_PARENT
-      )
-      webViewClient = object : WebViewClient() {
-        override fun onPageFinished(view: WebView?, url: String?) {
-          if (view == null || view.isVisible) {
-            return
+actual fun EntitySceneWebView(modifier: Modifier, url: String, onSceneLoaded: () -> Unit) {
+  var webView by remember { mutableStateOf<WebView?>(null) }
+
+  AndroidView(
+    factory = { context ->
+      WebView.setWebContentsDebuggingEnabled(true)
+      WebView(context).apply {
+        layoutParams = ViewGroup.LayoutParams(
+          ViewGroup.LayoutParams.MATCH_PARENT,
+          ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        webViewClient = object : WebViewClient() {
+          override fun onPageFinished(view: WebView?, url: String?) {
+            if (view == null) {
+              return
+            }
+            view.visibility = VISIBLE
           }
-          view.visibility = VISIBLE
-          view.alpha = 0f
-          view.animate()
-            .alpha(1f)
-            .duration = 350
+        }
+        settings.javaScriptEnabled = true
+        addJavascriptInterface(SceneWebApiAndroid(context, onSceneLoaded), SceneWebApi.NAME)
+        visibility = INVISIBLE
+        loadUrl(url)
+      }.also {
+        webView = it
+      }
+    }
+  )
+
+  webView?.setOnTouchListener { v, event ->
+    when (event.action) {
+      MotionEvent.ACTION_DOWN -> {
+        webView?.evaluateJavascript("window.name") {
+          Napier.d("evaluateJavascript result $it")
         }
       }
-      settings.javaScriptEnabled = true
-      addJavascriptInterface(SceneWebApiAndroid(context), SceneWebApi.NAME)
-      visibility = INVISIBLE
-      loadUrl(url)
+
+      MotionEvent.ACTION_UP -> v.performClick()
+      else -> {}
     }
-//    webView.setOnTouchListener { v, event ->
-//      when (event.action) {
-//        MotionEvent.ACTION_DOWN -> {
-//          webView.evaluateJavascript("window.postMessage({event: \"autoPlay\"})", null)
-//        }
-//
-//        MotionEvent.ACTION_UP -> v.performClick()
-//        else -> {}
-//      }
-//      return@setOnTouchListener false
-//    }
-    webView
-  })
+    return@setOnTouchListener false
+  }
 }

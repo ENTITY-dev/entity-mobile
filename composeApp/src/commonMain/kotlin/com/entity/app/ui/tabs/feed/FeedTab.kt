@@ -16,7 +16,7 @@ import com.entity.app.ui.screens.scene.SceneViewerScreen
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.List
 
-internal data class FeedTab(
+internal class FeedTab(
   private val hideBottomNavigationCallback: (Boolean) -> Unit,
 ) : Tab {
 
