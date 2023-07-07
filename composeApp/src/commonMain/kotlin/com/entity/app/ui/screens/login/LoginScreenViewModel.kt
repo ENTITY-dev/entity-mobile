@@ -9,7 +9,6 @@ import com.entity.app.ui.screens.login.LoginScreenEvent.PasswordChange
 import com.entity.app.ui.screens.login.LoginScreenEvent.UsernameChange
 import com.entity.app.ui.screens.login.LoginScreenViewState.Normal
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 private val LoginScreenInitialState = Normal(
@@ -17,7 +16,7 @@ private val LoginScreenInitialState = Normal(
 )
 
 class LoginScreenViewModel :
-  EntityViewModel<LoginScreenViewState, LoginScreenEvent, LoginScreenAction>(LoginScreenInitialState), KoinComponent {
+  EntityViewModel<LoginScreenViewState, LoginScreenEvent, LoginScreenAction>(LoginScreenInitialState) {
 
   private val userSettingsInteractor: UserSettingsInteractor by inject()
 

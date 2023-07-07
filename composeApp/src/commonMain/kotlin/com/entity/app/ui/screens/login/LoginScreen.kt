@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import com.entity.app.ui.EntityButtonComponent
-import com.entity.app.ui.screens.login.LoginScreenAction.AuthSuccess
 import com.entity.app.ui.screens.login.LoginScreenEvent.PasswordChange
 import com.entity.app.ui.screens.login.LoginScreenEvent.UsernameChange
 import com.entity.app.ui.screens.login.LoginScreenViewState.Normal
@@ -37,7 +36,6 @@ object LoginScreen : Screen {
       LoginScreenViewModel()
     }
     val viewState by screenModel.viewStates().collectAsState()
-    val viewAction by screenModel.viewActions().collectAsState(null)
 
     when (val state = viewState) {
       is Normal -> {
@@ -116,14 +114,6 @@ object LoginScreen : Screen {
             screenModel.obtainEvent(LoginScreenEvent.OnRegistrationClick)
           }
         }
-      }
-    }
-
-    when (val action = viewAction) {
-      AuthSuccess -> { }
-
-      null -> {
-        //no-op
       }
     }
   }

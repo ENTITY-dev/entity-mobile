@@ -5,14 +5,12 @@ import com.entity.app.data.interacotor.UserSettingsInteractor
 import com.entity.app.ui.EntityViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class UserTabViewModel :
   EntityViewModel<UserTabViewState, UserTabEvent, UserTabAction>(
     initialState = UserTabViewState.NotAuth
-  ),
-  KoinComponent {
+  ) {
 
   private val userSettingsInteractor: UserSettingsInteractor by inject()
 
