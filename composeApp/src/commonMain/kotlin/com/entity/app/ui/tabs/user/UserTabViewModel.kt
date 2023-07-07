@@ -3,7 +3,6 @@ package com.entity.app.ui.tabs.user
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.entity.app.data.interacotor.UserSettingsInteractor
 import com.entity.app.ui.EntityViewModel
-import com.entity.app.ui.tabs.user.UserTabEvent.Logout
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -35,9 +34,7 @@ class UserTabViewModel :
 
   override fun obtainEvent(viewEvent: UserTabEvent) {
     when (viewEvent) {
-      Logout -> {
-        userSettingsInteractor.logoutUser()
-      }
+      else -> {}
     }
   }
 }

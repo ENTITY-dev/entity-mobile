@@ -35,7 +35,7 @@ private const val REQUEST_TIMEOUT_MS = 50000L
 class EntityHttpClientFactory(
   private val userSettingsRepository: UserSettingsRepository,
 ) {
-  fun getClient() = HttpClient(HttpEngineFactory().createEngine()) {
+  fun create() = HttpClient(HttpEngineFactory().createEngine()) {
     install(Logging) {
       logger = Logger.SIMPLE
       level = ALL

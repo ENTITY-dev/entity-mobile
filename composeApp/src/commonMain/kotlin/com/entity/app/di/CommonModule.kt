@@ -1,8 +1,10 @@
 package com.entity.app.di
 
 import com.entity.app.data.api.FeedListApi
+import com.entity.app.data.api.UserInfoApi
 import com.entity.app.data.api.UserSettingsApi
 import com.entity.app.data.interacotor.FeedListInteractor
+import com.entity.app.data.interacotor.UserInfoInteractor
 import com.entity.app.data.interacotor.UserSettingsInteractor
 import com.entity.app.data.repository.FeedListRepository
 import com.entity.app.data.repository.UserSettingsRepository
@@ -17,13 +19,15 @@ val commonModule = module {
   singleOf(::UserSettingsRepository)
 
   singleOf(::FeedListApi)
+  singleOf(::UserInfoApi)
   singleOf(::UserSettingsApi)
 
   factoryOf(::UserSettingsInteractor)
   factoryOf(::FeedListInteractor)
+  factoryOf(::UserInfoInteractor)
   factoryOf(::EntityHttpClientFactory)
 
   single {
-    get<EntityHttpClientFactory>().getClient()
+    get<EntityHttpClientFactory>().create()
   }
 }

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
@@ -56,21 +57,23 @@ internal fun App() = EntityTheme(
         tabs = listOf(feedTab, UserTab)
       )
     }
-  ) {
+  ) { tabNavigator ->
     Scaffold(content = {
       Box(modifier = Modifier.padding(it)) {
         CurrentTab()
       }
     }, bottomBar = {
+      val isFeedTab = tabNavigator.current == feedTab
       AnimatedVisibility(
-        bottomBarIsVisible,
+        (bottomBarIsVisible && isFeedTab) || !isFeedTab,
         enter = slideInVertically(
           animationSpec = spring(
             stiffness = 500f,
             visibilityThreshold = IntOffset.VisibilityThreshold
           ),
           initialOffsetY = { it }
-        )
+        ),
+        exit = slideOutVertically(targetOffsetY = { 0 })
       ) {
         BottomNavigation(
           backgroundColor = EntityTheme.colors().bgMain, contentColor = EntityTheme.colors().mainText

@@ -96,7 +96,7 @@ private fun SafeScreen(
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Text("Entity", color = EntityTheme.colors().mainText, fontSize = 48.sp)
+    Text("ENTITY", color = EntityTheme.colors().mainText, fontSize = 48.sp)
     Text(
       text,
       color = if (isError) EntityTheme.colors().errorColor else EntityTheme.colors().mainText,
