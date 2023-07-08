@@ -1,11 +1,10 @@
 package com.entity.app.ui.screens.feed
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,31 +15,22 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.entity.app.ui.RippleTransparentButton
-import com.entity.app.ui.components.AnimationBox
 import com.entity.app.ui.theme.EntityTheme
-import com.seiko.imageloader.AsyncImagePainter
-import com.seiko.imageloader.ImageLoader
-import com.seiko.imageloader.ImageRequestState.Success
-import com.seiko.imageloader.LocalImageLoader
-import com.seiko.imageloader.model.ImageRequest
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.rememberImageAction
+import com.seiko.imageloader.rememberImageActionPainter
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.MoreVertical
-import io.github.skeptick.libres.compose.painterResource
 
 @Composable
 fun PostComponent(
@@ -49,58 +39,57 @@ fun PostComponent(
   onSceneClick: (PostUiModel) -> Unit,
   onOptionsClick: (PostUiModel) -> Unit,
 ) {
+  val scenePainterAction by rememberImageAction(model.scenePreviewUrl ?: "")
+  val authorPainterAction by rememberImageAction(model.authorImageUrl ?: "")
 
-  val scenePainter = rememberAsyncImagePainter(model.scenePreviewUrl ?: "")
-  val authorPainter = rememberAsyncImagePainter(model.authorImageUrl ?: "")
+  val scenePainter = rememberImageActionPainter(
+    scenePainterAction,
+    placeholderPainter = {
+      ColorPainter(EntityTheme.colors().bgMinor)
+    },
+    errorPainter = {
+      ColorPainter(EntityTheme.colors().bgMinor)
+    }
+  )
+  val authorPainter = rememberImageActionPainter(
+    authorPainterAction,
+    placeholderPainter = {
+      ColorPainter(EntityTheme.colors().bgMinor)
+    },
+    errorPainter = {
+      ColorPainter(EntityTheme.colors().bgMinor)
+    }
+  )
   val more = rememberVectorPainter(FeatherIcons.MoreVertical)
 
   RippleTransparentButton(
     onClick = { onSceneClick.invoke(model) },
-    modifier = Modifier
-      .fillMaxWidth()
-      .wrapContentHeight(),
+    modifier = Modifier.fillMaxWidth().wrapContentHeight(),
   ) {
     Column(modifier = modifier.fillMaxWidth()) {
-      if (scenePainter.requestState == Success) {
-        Image(
-          scenePainter,
-          null,
-          modifier = Modifier
-            .fillMaxWidth()
-            .height(238.dp),
-          contentScale = ContentScale.FillHeight
-        )
-
-      } else {
-        Box(
-          modifier = Modifier
-            .fillMaxWidth()
-            .height(238.dp)
-            .background(EntityTheme.colors().bgMinor)
-        )
-      }
-      Row(
+      // scene image
+      Image(
+        scenePainter,
+        contentDescription = null,
         modifier = Modifier
           .fillMaxWidth()
-          .padding(top = 12.dp)
-      ) {
-        if (authorPainter.requestState == Success) {
-          Image(
-            authorPainter,
-            null,
-            modifier = Modifier
-              .size(42.dp)
-              .clip(CircleShape)
-          )
-        } else {
-          Box(
-            modifier = Modifier
-              .size(42.dp)
-              .clip(CircleShape)
-              .background(EntityTheme.colors().bgMinor)
-          )
-        }
+          .height(238.dp),
+        contentScale = ContentScale.FillBounds
+      )
 
+      Spacer(modifier = Modifier.fillMaxWidth().height(12.dp))
+      //bottom item
+      Row(modifier = Modifier.fillMaxWidth()) {
+        //author image
+        Image(
+          authorPainter,
+          contentDescription = null,
+          modifier = Modifier
+            .size(42.dp)
+            .clip(CircleShape),
+          contentScale = ContentScale.FillBounds
+        )
+        //texts container
         Column(modifier = Modifier.padding(start = 12.dp)) {
           Text(
             modifier = Modifier.width(200.dp),
@@ -109,14 +98,14 @@ fun PostComponent(
             color = EntityTheme.colors().mainText
           )
           Text(
-            modifier = Modifier
-              .padding(top = 2.dp)
-              .width(200.dp),
+            modifier = Modifier.padding(top = 2.dp).width(200.dp),
             text = model.sceneSubtitle,
             style = EntityTheme.typography().subtitle,
             color = EntityTheme.colors().minorText
           )
         }
+
+        // trail container
         Column(
           modifier = Modifier
             .fillMaxWidth()
@@ -140,14 +129,4 @@ fun PostComponent(
       }
     }
   }
-
-//  RippleTransparentButton(
-//    onClick = { onSceneClick.invoke(model) },
-//    modifier = Modifier
-//      .fillMaxWidth()
-//      .wrapContentHeight()
-//  ) {
-//      authorPainter
-//    }
-//  }
 }
