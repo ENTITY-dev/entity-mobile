@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.entity.app.ui.RippleTransparentButton
+import com.entity.app.ui.components.ImageSlider
 import com.entity.app.ui.theme.EntityTheme
 import com.seiko.imageloader.rememberImageAction
 import com.seiko.imageloader.rememberImageActionPainter
@@ -68,13 +69,11 @@ fun PostComponent(
   ) {
     Column(modifier = modifier.fillMaxWidth()) {
       // scene image
-      Image(
-        scenePainter,
-        contentDescription = null,
+      ImageSlider(
+        listOf(model.scenePreviewUrl, model.scenePreviewUrl, model.scenePreviewUrl),
         modifier = Modifier
           .fillMaxWidth()
           .height(238.dp),
-        contentScale = ContentScale.FillBounds
       )
 
       Spacer(modifier = Modifier.fillMaxWidth().height(12.dp))
