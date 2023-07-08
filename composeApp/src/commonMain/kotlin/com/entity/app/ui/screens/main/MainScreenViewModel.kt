@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-class MainScreenViewModel : EntityViewModel<MainScreenViewState, MainScreenViewEvent, MainScreenViewAction>(
+internal class MainScreenViewModel : EntityViewModel<MainScreenViewState, MainScreenViewEvent, MainScreenViewAction>(
   MainScreenViewState.Normal(bottomBarVisible = true)
 ) {
 

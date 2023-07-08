@@ -35,7 +35,7 @@ import com.entity.app.ui.theme.EntityTheme
 import io.github.aakira.napier.Napier
 
 
-object MainScreen : Screen {
+internal object MainScreen : Screen {
 
   @OptIn(ExperimentalVoyagerApi::class)
   @Composable

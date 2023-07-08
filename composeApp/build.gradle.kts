@@ -10,6 +10,12 @@ plugins {
   alias(libs.plugins.apollo)
 }
 
+compose {
+  // Sets a specific JetBrains Compose Compiler version
+  kotlinCompilerPlugin.set("1.4.7")
+  kotlinCompilerPluginArgs.add("suppressKotlinVersionCompatibilityCheck=1.8.21")
+}
+
 kotlin {
   android {
     compilations.all {

@@ -37,6 +37,7 @@ actual fun EntitySceneWebView(modifier: Modifier, url: String, onSceneLoaded: ()
       name = "iosHandler"
     )
     val webView = WKWebView(bounds, configuration)
+//    webView.backgroundColor = EntityTheme.colors().bgMain.toUi UIColor
     webView
   }
   val alphaVisible: Float by animateFloatAsState(
