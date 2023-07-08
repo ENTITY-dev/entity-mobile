@@ -29,6 +29,7 @@ import com.entity.app.ui.screens.feed.FeedScreenState.EMPTY
 import com.entity.app.ui.screens.feed.FeedScreenState.Error
 import com.entity.app.ui.screens.feed.FeedScreenState.LOADING
 import com.entity.app.ui.screens.feed.FeedScreenState.Result
+import com.entity.app.ui.screens.scene.SceneScreenParam
 import com.entity.app.ui.screens.scene.SceneViewerScreen
 import com.entity.app.ui.theme.EntityTheme
 import kotlinx.coroutines.launch
@@ -42,13 +43,7 @@ object FeedScreen : Screen {
     val viewState by screenModel.viewStates().collectAsState()
 
     when (val state = viewState) {
-      EMPTY -> {
-        SafeScreen("Your feed is empty.\n Please refresh your list.", isError = false) {
-          screenModel.obtainEvent(
-            RefreshFeedListScreen
-          )
-        }
-      }
+      EMPTY -> {}
 
       LOADING -> {
         FeedListWithPlaceholders(count = 3)
@@ -74,7 +69,7 @@ object FeedScreen : Screen {
         screenModel.viewActions().collect { action ->
           when (action) {
             is OpenWebViewer -> {
-              navigator.push(SceneViewerScreen(action.sceneId))
+              navigator.push(SceneViewerScreen(SceneScreenParam(action.sceneId, false)))
             }
 
             else -> {}

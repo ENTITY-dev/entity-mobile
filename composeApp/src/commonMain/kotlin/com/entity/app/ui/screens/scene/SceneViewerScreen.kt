@@ -1,7 +1,6 @@
 package com.entity.app.ui.screens.scene
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -20,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -31,6 +29,7 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.entity.app.ui.components.EntityCircularProgressIndicator
+import com.entity.app.ui.screens.main.MainScreen
 import com.entity.app.ui.screens.scene.EntitySceneScreenEvent.OnSceneLoaded
 import com.entity.app.ui.screens.scene.EntitySceneViewState.Visible
 import com.entity.app.ui.theme.EntityTheme
@@ -40,33 +39,34 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowLeft
 
 data class SceneViewerScreen(
-  private val sceneId: String,
+  private val param: SceneScreenParam
 ) : Screen {
 
-  override val key: ScreenKey = sceneId
+  override val key: ScreenKey = param.sceneId
 
   @Composable
   override fun Content() {
     val navigator = LocalNavigator.currentOrThrow
     val screenModel = rememberScreenModel { EntitySceneViewModel() }
     val viewState by screenModel.viewStates().collectAsState()
-    val viewAction by screenModel.viewActions().collectAsState(null)
 
     when (val state = viewState) {
       is Visible -> {
         SceneViewer(
-          sceneId = sceneId,
+          sceneId = param.sceneId,
           onCloseClick = {
-            navigator.pop()
+            if (param.isPromo) {
+              navigator.popUntilRoot()
+              navigator.replace(MainScreen)
+            } else {
+              navigator.pop()
+            }
           },
           onSceneLoaded = {
             screenModel.obtainEvent(OnSceneLoaded)
           },
           visible = state.isLoading
         )
-      }
-
-      else -> {
       }
     }
   }
@@ -82,21 +82,13 @@ private fun SceneViewer(
   val url = remember { "https://${ENTITY_DEFAULT_HOST}/scenes/${sceneId}/embed" }
   val painter = rememberVectorPainter(FeatherIcons.ArrowLeft)
   val visibleAnimTimeMs = 800
-  val alphaVisible: Float by animateFloatAsState(
-    targetValue = if (visible) 1f else 0f,
-    animationSpec = tween(durationMillis = visibleAnimTimeMs)
-  )
-  Box(
-    modifier = Modifier
-      .fillMaxSize()
-      .alpha(alphaVisible)
-      .background(EntityTheme.colors().bgMain),
-  ) {
+  Box(modifier = Modifier.fillMaxSize()) {
     EntitySceneWebView(
       modifier = Modifier
-        .fillMaxSize(),
+        .fillMaxSize().background(EntityTheme.colors().bgMain),
       url = url,
-      onSceneLoaded = onSceneLoaded
+      onSceneLoaded = onSceneLoaded,
+      visible = visible
     )
   }
   Box {

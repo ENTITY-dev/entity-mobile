@@ -13,19 +13,22 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.entity.app.ui.screens.main.MainScreenViewState.Normal
 import com.entity.app.ui.tabs.feed.FeedTab
 import com.entity.app.ui.tabs.user.UserTab
 import com.entity.app.ui.theme.EntityTheme
@@ -37,56 +40,56 @@ object MainScreen : Screen {
   @OptIn(ExperimentalVoyagerApi::class)
   @Composable
   override fun Content() {
-    var bottomBarIsVisible by remember {
-      mutableStateOf(false)
-    }
-    val changeVisibleBottomBarCallback = remember {
-      { visible: Boolean ->
-        bottomBarIsVisible = visible
+    val navigator = LocalNavigator.currentOrThrow
+    val screenModel = rememberScreenModel { MainScreenViewModel() }
+    val viewState by screenModel.viewStates().collectAsState()
+
+    when (val state = viewState) {
+      is Normal -> {
+        TabNavigator(
+          tab = FeedTab,
+          tabDisposable = {
+            TabDisposable(
+              navigator = it,
+              tabs = listOf(FeedTab, UserTab)
+            )
+          }
+        ) { tabNavigator ->
+          LaunchedEffect(tabNavigator) {
+            screenModel.obtainEvent(MainScreenViewEvent.TabChange(tabNavigator.current))
+          }
+          Scaffold(content = {
+            Box(modifier = Modifier.padding(it)) {
+              CurrentTab()
+            }
+          }, bottomBar = {
+            AnimatedVisibility(
+              state.bottomBarVisible,
+              enter = slideInVertically(
+                animationSpec = spring(
+                  stiffness = 500f,
+                  visibilityThreshold = IntOffset.VisibilityThreshold
+                ),
+                initialOffsetY = { it }
+              ),
+              exit = slideOutVertically(
+                targetOffsetY = { 0 }
+              )
+            ) {
+              BottomNavigation(
+                backgroundColor = EntityTheme.colors().bgMain, contentColor = EntityTheme.colors().mainText
+              ) {
+                TabNavigationItem(FeedTab)
+                TabNavigationItem(UserTab)
+              }
+            }
+          },
+            backgroundColor = EntityTheme.colors().bgMain
+          )
+        }
       }
-    }
-    val feedTab = remember {
-      FeedTab(changeVisibleBottomBarCallback)
     }
 
-    TabNavigator(
-      tab = feedTab,
-      tabDisposable = {
-        TabDisposable(
-          navigator = it,
-          tabs = listOf(feedTab, UserTab)
-        )
-      }
-    ) { tabNavigator ->
-      Scaffold(content = {
-        Box(modifier = Modifier.padding(it)) {
-          CurrentTab()
-        }
-      }, bottomBar = {
-        val isFeedTab = tabNavigator.current == feedTab
-        AnimatedVisibility(
-          (bottomBarIsVisible && isFeedTab) || !isFeedTab,
-          enter = slideInVertically(
-            animationSpec = spring(
-              stiffness = 500f,
-              visibilityThreshold = IntOffset.VisibilityThreshold
-            ),
-            initialOffsetY = { it }
-          ),
-          exit = slideOutVertically(
-            targetOffsetY = { 0 }
-          )
-        ) {
-          BottomNavigation(
-            backgroundColor = EntityTheme.colors().bgMain, contentColor = EntityTheme.colors().mainText
-          ) {
-            TabNavigationItem(feedTab)
-            TabNavigationItem(UserTab)
-          }
-        }
-      }, backgroundColor = EntityTheme.colors().bgMain
-      )
-    }
   }
 }
 

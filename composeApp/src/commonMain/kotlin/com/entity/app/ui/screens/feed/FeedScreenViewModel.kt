@@ -1,6 +1,9 @@
 package com.entity.app.ui.screens.feed
 
 import cafe.adriel.voyager.core.model.coroutineScope
+import com.entity.app.data.ResponseState.Error
+import com.entity.app.data.ResponseState.Loading
+import com.entity.app.data.ResponseState.Success
 import com.entity.app.data.interacotor.FeedListInteractor
 import com.entity.app.data.model.PostResponseModel
 import com.entity.app.ui.EntityViewModel
@@ -10,6 +13,7 @@ import com.entity.app.ui.screens.feed.FeedScreenState.Result
 import com.entity.app.utils.DateTimeKtx
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
@@ -72,22 +76,24 @@ class FeedScreenViewModel :
 
   private fun loadFeedList() {
     updateFeedJob?.cancel()
-    viewState = FeedScreenState.LOADING
     updateFeedJob = coroutineScope.launch {
-      viewState = try {
-        val response = feedListInteractor.getFeedPostResponseModels(loadMore = false)
-        val uiModels = response.models.map {
-          mapResponseToUiModels(it)
+      feedListInteractor.getFeedPostResponseModelsFlow(loadMore = false).collectLatest { state ->
+        viewState = when (state) {
+          is Error -> FeedScreenState.Error(state.throwable.message ?: "")
+          Loading -> FeedScreenState.LOADING
+          is Success -> {
+            val uiModels = state.item.models.map {
+              mapResponseToUiModels(it)
+            }
+            Result(
+              models = uiModels,
+              isRefreshing = false,
+              showPlaceHolder = false,
+              canLoadMore = state.item.canLoadMore
+            )
+          }
+
         }
-        Result(
-          models = uiModels,
-          isRefreshing = false,
-          showPlaceHolder = false,
-          canLoadMore = response.canLoadMore
-        )
-      } catch (e: Exception) {
-        Napier.e("Exception in FeedScreenViewModel", e)
-        FeedScreenState.Error(e.message ?: "")
       }
     }
   }
@@ -128,5 +134,4 @@ class FeedScreenViewModel :
       }
     }
   }
-
 }

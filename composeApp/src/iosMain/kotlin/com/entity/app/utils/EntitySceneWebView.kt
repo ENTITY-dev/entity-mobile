@@ -1,10 +1,14 @@
 package com.entity.app.utils
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.interop.UIKitView
+import com.entity.app.ui.theme.EntityTheme
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.delay
 import platform.Foundation.NSURL
@@ -20,7 +24,7 @@ import platform.WebKit.javaScriptEnabled
 import platform.darwin.NSObject
 
 @Composable
-actual fun EntitySceneWebView(modifier: Modifier, url: String, onSceneLoaded: () -> Unit) {
+actual fun EntitySceneWebView(modifier: Modifier, url: String, onSceneLoaded: () -> Unit, visible: Boolean) {
   val webView = remember {
     val bounds = UIScreen.mainScreen.bounds()
     val preferences = WKPreferences()
@@ -35,16 +39,20 @@ actual fun EntitySceneWebView(modifier: Modifier, url: String, onSceneLoaded: ()
     val webView = WKWebView(bounds, configuration)
     webView
   }
+  val alphaVisible: Float by animateFloatAsState(
+    targetValue = if (visible) 1f else 0f,
+    animationSpec = tween(durationMillis = 800)
+  )
   UIKitView(
-    factory = {
-      webView
-    },
+    factory = { webView },
     modifier = modifier,
     update = { view ->
-      view.loadRequest(NSURLRequest(NSURL(string = url)))
-    }
+      view.alpha = alphaVisible.toDouble()
+    },
+    background = EntityTheme.colors().bgMain
   )
   LaunchedEffect(Unit) {
+    webView.loadRequest(NSURLRequest(NSURL(string = url)))
     delay(5000)
     webView.evaluateJavaScript("window.name") { result, error ->
       Napier.d("evaluateJavaScript result ${result.toString()}")

@@ -1,11 +1,11 @@
 package com.entity.app.data.interacotor
 
-import com.entity.app.data.api.LaunchScreenApi
+import com.entity.app.data.repository.LaunchRepository
 
 class LaunchInteractor(
-  private val launchScreenApi: LaunchScreenApi
+  private val launchRepository: LaunchRepository
 ) {
   suspend fun getPromoSceneId(): String? {
-    return launchScreenApi.getLaunchResponse().url
+    return launchRepository.getLaunchResponse().url
   }
 }
