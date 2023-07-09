@@ -21,6 +21,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.entity.app.ui.EntityButtonComponent
 import com.entity.app.ui.screens.feed.FeedScreenAction.OpenWebViewer
+import com.entity.app.ui.screens.feed.FeedScreenEvent.AutoPlayItem
 import com.entity.app.ui.screens.feed.FeedScreenEvent.LoadNewPage
 import com.entity.app.ui.screens.feed.FeedScreenEvent.OptionsClick
 import com.entity.app.ui.screens.feed.FeedScreenEvent.RefreshFeedListScreen
@@ -53,9 +54,10 @@ object FeedScreen : Screen {
         FeedListWithPost(
           feedList = state.models,
           canLoadMore = state.canLoadMore,
-          loadMore = { screenModel.obtainEvent(LoadNewPage) },
+          onLoadMore = { screenModel.obtainEvent(LoadNewPage) },
           onSceneClick = { screenModel.obtainEvent(SceneClick(it)) },
-          onOptionsClick = { screenModel.obtainEvent(OptionsClick(it)) }
+          onOptionsClick = { screenModel.obtainEvent(OptionsClick(it)) },
+          onAutoPlayItem = { screenModel.obtainEvent(AutoPlayItem(it)) }
         )
       }
 

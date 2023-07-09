@@ -1,11 +1,5 @@
 package com.entity.app.ui.screens.feed
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,17 +9,18 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.entity.app.ui.screens.feed.PostUiModel
 import com.entity.app.ui.screens.feed.PostUiModel.Companion.PLACEHOLDER_ID
 
 @Composable
 fun FeedListWithPost(
   feedList: List<PostUiModel>,
   canLoadMore: Boolean,
-  loadMore: () -> Unit,
+  onLoadMore: () -> Unit,
+  onAutoPlayItem: (PostUiModel) -> Unit,
   onSceneClick: (PostUiModel) -> Unit,
   onOptionsClick: (PostUiModel) -> Unit,
 ) {
@@ -34,6 +29,14 @@ fun FeedListWithPost(
   val isScrolledToEnd = remember {
     derivedStateOf {
       listState.isScrolledToEnd()
+    }
+  }
+
+  val autoplayIndex by remember {
+    derivedStateOf {
+      if (feedList.size - 1 == listState.firstVisibleItemIndex)
+        listState.firstVisibleItemIndex
+      else listState.firstVisibleItemIndex + 1
     }
   }
 
@@ -62,9 +65,11 @@ fun FeedListWithPost(
   }
 
   if (isScrolledToEnd.value && canLoadMore) {
-    loadMore.invoke()
+    onLoadMore.invoke()
   }
-
+  LaunchedEffect(autoplayIndex) {
+    onAutoPlayItem.invoke(feedList[autoplayIndex])
+  }
 }
 
 private fun LazyListState.isScrolledToEnd(): Boolean {

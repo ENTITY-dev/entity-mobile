@@ -6,11 +6,12 @@ data class PostUiModel(
   val sceneSubtitle: String,
   val authorImageUrl: String?,
   val scenePreviewUrl: String?,
+  val isAutoPlying: Boolean
 ) {
   fun isPlaceholder() = this == Empty
 
   companion object {
     const val PLACEHOLDER_ID = "-1"
-    val Empty = PostUiModel(PLACEHOLDER_ID, "", "", "", "")
+    val Empty = PostUiModel(PLACEHOLDER_ID, "", "", "", "", false)
   }
 }

@@ -6,4 +6,5 @@ sealed interface FeedScreenEvent {
   object ViewAppear : FeedScreenEvent
   data class OptionsClick(val model: PostUiModel) : FeedScreenEvent
   data class SceneClick(val model: PostUiModel) : FeedScreenEvent
+  data class AutoPlayItem(val model: PostUiModel) : FeedScreenEvent
 }

@@ -8,6 +8,11 @@ import com.entity.app.data.interacotor.FeedListInteractor
 import com.entity.app.data.model.PostResponseModel
 import com.entity.app.ui.EntityViewModel
 import com.entity.app.ui.screens.feed.FeedScreenAction.OpenWebViewer
+import com.entity.app.ui.screens.feed.FeedScreenEvent.AutoPlayItem
+import com.entity.app.ui.screens.feed.FeedScreenEvent.LoadNewPage
+import com.entity.app.ui.screens.feed.FeedScreenEvent.OptionsClick
+import com.entity.app.ui.screens.feed.FeedScreenEvent.RefreshFeedListScreen
+import com.entity.app.ui.screens.feed.FeedScreenEvent.SceneClick
 import com.entity.app.ui.screens.feed.FeedScreenEvent.ViewAppear
 import com.entity.app.ui.screens.feed.FeedScreenState.Result
 import com.entity.app.utils.DateTimeKtx
@@ -33,24 +38,31 @@ class FeedScreenViewModel :
 
   override fun obtainEvent(viewEvent: FeedScreenEvent) {
     when (viewEvent) {
-      FeedScreenEvent.RefreshFeedListScreen -> {
+      RefreshFeedListScreen -> {
         feedListInteractor.clearFeedList()
         loadFeedList()
       }
 
-      FeedScreenEvent.LoadNewPage -> {
+      LoadNewPage -> {
         increaseFeedList()
       }
 
       ViewAppear -> {
       }
 
-      is FeedScreenEvent.SceneClick -> {
+      is SceneClick -> {
         onSceneClick(viewEvent.model)
       }
 
-      is FeedScreenEvent.OptionsClick -> {
+      is OptionsClick -> {
         onOptionsClick(viewEvent.model)
+      }
+
+      is AutoPlayItem -> {
+        val state = viewState as? Result ?: return
+        viewState = state.copy(models = state.models.map {
+          it.copy(isAutoPlying = viewEvent.model.sceneId == it.sceneId)
+        })
       }
     }
   }
@@ -62,7 +74,8 @@ class FeedScreenViewModel :
       sceneTitle = model.name,
       sceneSubtitle = "${model.author.name} - ${model.viewsCount} - $publishDate",
       authorImageUrl = model.author.authorImageUrl,
-      scenePreviewUrl = model.scenePreviewUrl
+      scenePreviewUrl = model.scenePreviewUrl,
+      isAutoPlying = false
     )
   }
 
@@ -92,7 +105,6 @@ class FeedScreenViewModel :
               canLoadMore = state.item.canLoadMore
             )
           }
-
         }
       }
     }
