@@ -1,6 +1,9 @@
 package com.entity.app.ui.screens.login
 
 import cafe.adriel.voyager.core.model.coroutineScope
+import com.entity.app.data.ResponseState.Error
+import com.entity.app.data.ResponseState.Loading
+import com.entity.app.data.ResponseState.Success
 import com.entity.app.data.interacotor.UserSettingsInteractor
 import com.entity.app.ui.EntityViewModel
 import com.entity.app.ui.screens.login.LoginScreenEvent.OnLoginClick
@@ -8,6 +11,7 @@ import com.entity.app.ui.screens.login.LoginScreenEvent.OnRegistrationClick
 import com.entity.app.ui.screens.login.LoginScreenEvent.PasswordChange
 import com.entity.app.ui.screens.login.LoginScreenEvent.UsernameChange
 import com.entity.app.ui.screens.login.LoginScreenViewState.Normal
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
@@ -44,16 +48,25 @@ class LoginScreenViewModel :
 
   private fun onLoginClick() {
     val state = (viewState as? Normal) ?: return
-    viewState = state.copy(isLoading = true)
     coroutineScope.launch {
       val username = state.username.trim()
       val password = state.password.trim()
-      try {
-        userSettingsInteractor.authUser(username, password)
-        viewState = state.copy(isLoading = false)
-        viewAction = LoginScreenAction.AuthSuccess
-      } catch (e: Exception) {
-        viewState = state.copy(isLoading = false, notificationText = e.message ?: "")
+      userSettingsInteractor.authUserFlow(username, password).collectLatest { flowState ->
+        viewState = when (flowState) {
+          is Error -> {
+            state.copy(isLoading = false, notificationText = flowState.throwable.message ?: "")
+          }
+
+          Loading -> {
+            state.copy(isLoading = true)
+          }
+
+          is Success -> {
+            state.copy(isLoading = false).also {
+              viewAction = LoginScreenAction.AuthSuccess
+            }
+          }
+        }
       }
     }
   }
@@ -65,12 +78,22 @@ class LoginScreenViewModel :
       val username = state.username.trim()
       val password = state.password.trim()
       val name = state.username.trim()
-      try {
-        userSettingsInteractor.registerUser(username, password, name)
-        viewState = state.copy(isLoading = false)
-        viewAction = LoginScreenAction.AuthSuccess
-      } catch (e: Exception) {
-        viewState = state.copy(isLoading = false, notificationText = e.message ?: "")
+      userSettingsInteractor.registerUserFlow(username, password, name).collectLatest { flowState ->
+        viewState = when (flowState) {
+          is Error -> {
+            state.copy(isLoading = false, notificationText = flowState.throwable.message ?: "")
+          }
+
+          Loading -> {
+            state.copy(isLoading = true)
+          }
+
+          is Success -> {
+            state.copy(isLoading = false).also {
+              viewAction = LoginScreenAction.AuthSuccess
+            }
+          }
+        }
       }
     }
   }

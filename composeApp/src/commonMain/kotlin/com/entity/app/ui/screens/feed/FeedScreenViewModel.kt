@@ -93,7 +93,9 @@ class FeedScreenViewModel :
       feedListInteractor.getFeedPostResponseModelsFlow(loadMore = false).collectLatest { state ->
         viewState = when (state) {
           is Error -> FeedScreenState.Error(state.throwable.message ?: "")
+
           Loading -> FeedScreenState.LOADING
+
           is Success -> {
             val uiModels = state.item.models.map {
               mapResponseToUiModels(it)
@@ -115,34 +117,41 @@ class FeedScreenViewModel :
       return
     }
     val state = viewState as? Result ?: return
-    val uiModelsWithPlaceholder = state.models.toMutableList()
-    uiModelsWithPlaceholder.add(PostUiModel.Empty)
-    viewState = Result(
-      models = uiModelsWithPlaceholder,
-      isRefreshing = true,
-      showPlaceHolder = false,
-      canLoadMore = false
-    )
     updateFeedJob = coroutineScope.launch {
-      viewState = try {
-        val response = feedListInteractor.getFeedPostResponseModels(loadMore = true)
-        val uiModels = response.models.map {
-          mapResponseToUiModels(it)
+      feedListInteractor.getFeedPostResponseModelsFlow(loadMore = true).collectLatest { flowState ->
+        viewState = when (flowState) {
+          is Error -> {
+            Napier.e("Exception in FeedScreenViewModel", flowState.throwable)
+            Result(
+              models = state.models.filter { !it.isPlaceholder() },
+              isRefreshing = false,
+              showPlaceHolder = false,
+              canLoadMore = true
+            )
+          }
+          Loading -> {
+            val uiModelsWithPlaceholder = state.models.toMutableList()
+            uiModelsWithPlaceholder.add(PostUiModel.Empty)
+            Result(
+              models = uiModelsWithPlaceholder,
+              isRefreshing = true,
+              showPlaceHolder = false,
+              canLoadMore = false
+            )
+          }
+
+          is Success -> {
+            val uiModels = flowState.item.models.map {
+              mapResponseToUiModels(it)
+            }
+            Result(
+              models = uiModels,
+              isRefreshing = false,
+              showPlaceHolder = false,
+              canLoadMore = flowState.item.canLoadMore
+            )
+          }
         }
-        Result(
-          models = uiModels,
-          isRefreshing = false,
-          showPlaceHolder = false,
-          canLoadMore = response.canLoadMore
-        )
-      } catch (e: Exception) {
-        Napier.e("Exception in FeedScreenViewModel", e)
-        Result(
-          models = state.models.filter { !it.isPlaceholder() },
-          isRefreshing = false,
-          showPlaceHolder = false,
-          canLoadMore = true
-        )
       }
     }
   }

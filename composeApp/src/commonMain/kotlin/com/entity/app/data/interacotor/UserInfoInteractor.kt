@@ -1,13 +1,18 @@
 package com.entity.app.data.interacotor
 
-import com.entity.app.data.api.UserInfoApi
+import com.entity.app.data.repository.UserInfoRepository
+import io.github.aakira.napier.Napier
 
 class UserInfoInteractor(
-  private val userInfoApi: UserInfoApi
+  private val userInfoRepository: UserInfoRepository,
 ) {
 
   suspend fun getUserInfo() {
-    userInfoApi.getCurrentUserInfo()
+    try {
+      userInfoRepository.getUserInfo()
+    } catch (error: Exception) {
+      Napier.e(error.message ?: "", error)
+    }
   }
 
 }

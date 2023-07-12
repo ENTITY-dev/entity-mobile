@@ -55,7 +55,7 @@ internal object MainScreen : Screen {
             )
           }
         ) { tabNavigator ->
-          LaunchedEffect(tabNavigator) {
+          LaunchedEffect(tabNavigator.current) {
             screenModel.obtainEvent(MainScreenViewEvent.TabChange(tabNavigator.current))
           }
           Scaffold(content = {

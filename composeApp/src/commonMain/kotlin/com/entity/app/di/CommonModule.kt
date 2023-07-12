@@ -11,6 +11,7 @@ import com.entity.app.data.interacotor.UserSettingsInteractor
 import com.entity.app.data.repository.BottomBarNavigationStateRepository
 import com.entity.app.data.repository.FeedListRepository
 import com.entity.app.data.repository.LaunchRepository
+import com.entity.app.data.repository.UserInfoRepository
 import com.entity.app.data.repository.UserSettingsRepository
 import com.entity.app.utils.EntityHttpClientFactory
 import org.koin.core.module.dsl.factoryOf
@@ -22,6 +23,7 @@ val commonModule = module {
   singleOf(::FeedListRepository)
   singleOf(::UserSettingsRepository)
   singleOf(::LaunchRepository)
+  singleOf(::UserInfoRepository)
   singleOf(::BottomBarNavigationStateRepository)
 
   singleOf(::FeedListApi)
