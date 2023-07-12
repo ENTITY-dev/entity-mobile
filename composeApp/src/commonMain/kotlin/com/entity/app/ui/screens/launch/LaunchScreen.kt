@@ -52,7 +52,7 @@ object LaunchScreen : Screen {
           }
 
           is OpenPromoScreen -> {
-            navigator.push(SceneViewerScreen(SceneScreenParam(action.promo, true)))
+            navigator.push(SceneViewerScreen(SceneScreenParam(action.sceneId, true)))
           }
 
           else -> {

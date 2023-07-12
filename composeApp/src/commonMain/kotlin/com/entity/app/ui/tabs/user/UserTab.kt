@@ -9,6 +9,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.entity.app.EntityRes
 import com.entity.app.ui.screens.login.LoginScreen
 import com.entity.app.ui.screens.profile.ProfileScreen
 import com.entity.app.ui.tabs.user.UserTabViewState.Auth
@@ -22,7 +23,7 @@ internal object UserTab : Tab {
   override val options: TabOptions
     @Composable
     get() {
-      val title = "User"
+      val title = EntityRes.string.user_tab
       val icon = rememberVectorPainter(FeatherIcons.User)
       return remember {
         TabOptions(

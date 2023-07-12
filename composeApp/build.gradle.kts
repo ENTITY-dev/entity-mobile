@@ -11,9 +11,7 @@ plugins {
 }
 
 compose {
-  // Sets a specific JetBrains Compose Compiler version
   kotlinCompilerPlugin.set("1.4.7")
-  kotlinCompilerPluginArgs.add("suppressKotlinVersionCompatibilityCheck=1.8.21")
 }
 
 kotlin {
@@ -146,7 +144,9 @@ android {
 
 
 libres {
-  // https://github.com/Skeptick/libres#setup
+  generatedClassName = "EntityRes"
+  baseLocaleLanguageCode = "en"
+  generateNamedArguments = true
 }
 
 buildConfig {

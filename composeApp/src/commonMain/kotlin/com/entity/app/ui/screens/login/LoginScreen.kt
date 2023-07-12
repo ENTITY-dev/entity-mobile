@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import com.entity.app.EntityRes
 import com.entity.app.ui.EntityButtonComponent
 import com.entity.app.ui.screens.login.LoginScreenEvent.PasswordChange
 import com.entity.app.ui.screens.login.LoginScreenEvent.UsernameChange
@@ -101,14 +102,14 @@ object LoginScreen : Screen {
 
           EntityButtonComponent(
             modifier = Modifier.padding(top = 16.dp),
-            text = "Sign in",
+            text = EntityRes.string.user_tab_sign_in_button,
             enabled = !state.isLoading
           ) {
             screenModel.obtainEvent(LoginScreenEvent.OnLoginClick)
           }
           EntityButtonComponent(
             modifier = Modifier.padding(top = 16.dp),
-            text = "Sign up",
+            text = EntityRes.string.user_tab_sign_up_button,
             enabled = !state.isLoading
           ) {
             screenModel.obtainEvent(LoginScreenEvent.OnRegistrationClick)

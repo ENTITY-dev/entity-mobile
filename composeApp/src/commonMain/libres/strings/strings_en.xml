@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="feed_tab">Feed</string>
+  <string name="user_tab">User</string>
+  <string name="user_tab_sign_in_button">Sign in</string>
+  <string name="user_tab_sign_up_button">Sign up</string>
+</resources>
