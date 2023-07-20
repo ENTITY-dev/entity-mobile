@@ -1,7 +1,9 @@
 package com.entity.app.ui.screens.profile
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,8 +34,13 @@ object ProfileScreen : Screen {
           verticalArrangement = Arrangement.Center,
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
-          EntityButtonComponent(modifier = Modifier.padding(horizontal = 16.dp), "Logout") {
-            screenModel.obtainEvent(ProfileScreenEvent.Logout)
+          Box(modifier = Modifier.fillMaxSize()) {
+            EntityButtonComponent(
+              modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.Center),
+              text = "Logout"
+            ) {
+              screenModel.obtainEvent(ProfileScreenEvent.Logout)
+            }
           }
         }
       }
