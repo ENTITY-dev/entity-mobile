@@ -11,6 +11,7 @@ import com.entity.app.ui.screens.feed.FeedScreenAction.OpenWebViewer
 import com.entity.app.ui.screens.feed.FeedScreenEvent.AutoPlayItem
 import com.entity.app.ui.screens.feed.FeedScreenEvent.LoadNewPage
 import com.entity.app.ui.screens.feed.FeedScreenEvent.OptionsClick
+import com.entity.app.ui.screens.feed.FeedScreenEvent.PullToRefresh
 import com.entity.app.ui.screens.feed.FeedScreenEvent.RefreshFeedListScreen
 import com.entity.app.ui.screens.feed.FeedScreenEvent.SceneClick
 import com.entity.app.ui.screens.feed.FeedScreenEvent.ViewAppear
@@ -63,6 +64,41 @@ class FeedScreenViewModel :
           it.copy(isAutoPlying = viewEvent.model.sceneId == it.sceneId)
         })
       }
+
+      PullToRefresh -> {
+        refreshSuccessList()
+      }
+    }
+  }
+
+  private fun refreshSuccessList() {
+    val prevState = viewState as? Result ?: return
+    updateFeedJob?.cancel()
+    updateFeedJob = coroutineScope.launch {
+      feedListInteractor.getFeedPostResponseModelsFlow(loadMore = false, shouldRefreshList = true)
+        .collectLatest { state ->
+          viewState = when (state) {
+            is Error -> {
+              prevState
+            }
+
+            Loading -> {
+              prevState.copy(isRefreshing = true)
+            }
+
+            is Success -> {
+              val uiModels = state.item.models.map {
+                mapResponseToUiModels(it)
+              }
+              Result(
+                models = uiModels,
+                isRefreshing = false,
+                showPlaceHolder = false,
+                canLoadMore = state.item.canLoadMore
+              )
+            }
+          }
+        }
     }
   }
 
@@ -90,27 +126,28 @@ class FeedScreenViewModel :
     updateFeedJob?.cancel()
     val prevStateIsError = viewState as? FeedScreenState.Error
     updateFeedJob = coroutineScope.launch {
-      feedListInteractor.getFeedPostResponseModelsFlow(loadMore = false).collectLatest { state ->
-        viewState = when (state) {
-          is Error -> FeedScreenState.Error(state.message ?: "", false)
+      feedListInteractor.getFeedPostResponseModelsFlow(loadMore = false, shouldRefreshList = false)
+        .collectLatest { state ->
+          viewState = when (state) {
+            is Error -> FeedScreenState.Error(state.message ?: "", false)
 
-          Loading ->  {
-            prevStateIsError?.copy(isRefreshing = true) ?: FeedScreenState.LoadingWithPlaceholders
-          }
-
-          is Success -> {
-            val uiModels = state.item.models.map {
-              mapResponseToUiModels(it)
+            Loading -> {
+              prevStateIsError?.copy(isRefreshing = true) ?: FeedScreenState.LoadingWithPlaceholders
             }
-            Result(
-              models = uiModels,
-              isRefreshing = false,
-              showPlaceHolder = false,
-              canLoadMore = state.item.canLoadMore
-            )
+
+            is Success -> {
+              val uiModels = state.item.models.map {
+                mapResponseToUiModels(it)
+              }
+              Result(
+                models = uiModels,
+                isRefreshing = false,
+                showPlaceHolder = false,
+                canLoadMore = state.item.canLoadMore
+              )
+            }
           }
         }
-      }
     }
   }
 
@@ -120,41 +157,43 @@ class FeedScreenViewModel :
     }
     val state = viewState as? Result ?: return
     updateFeedJob = coroutineScope.launch {
-      feedListInteractor.getFeedPostResponseModelsFlow(loadMore = true).collectLatest { flowState ->
-        viewState = when (flowState) {
-          is Error -> {
-            Napier.e("Exception in FeedScreenViewModel", flowState.throwable)
-            Result(
-              models = state.models.filter { !it.isPlaceholder() },
-              isRefreshing = false,
-              showPlaceHolder = false,
-              canLoadMore = true
-            )
-          }
-          Loading -> {
-            val uiModelsWithPlaceholder = state.models.toMutableList()
-            uiModelsWithPlaceholder.add(PostUiModel.Empty)
-            Result(
-              models = uiModelsWithPlaceholder,
-              isRefreshing = true,
-              showPlaceHolder = false,
-              canLoadMore = false
-            )
-          }
-
-          is Success -> {
-            val uiModels = flowState.item.models.map {
-              mapResponseToUiModels(it)
+      feedListInteractor.getFeedPostResponseModelsFlow(loadMore = true, shouldRefreshList = false)
+        .collectLatest { flowState ->
+          viewState = when (flowState) {
+            is Error -> {
+              Napier.e("Exception in FeedScreenViewModel", flowState.throwable)
+              Result(
+                models = state.models.filter { !it.isPlaceholder() },
+                isRefreshing = false,
+                showPlaceHolder = false,
+                canLoadMore = true
+              )
             }
-            Result(
-              models = uiModels,
-              isRefreshing = false,
-              showPlaceHolder = false,
-              canLoadMore = flowState.item.canLoadMore
-            )
+
+            Loading -> {
+              val uiModelsWithPlaceholder = state.models.toMutableList()
+              uiModelsWithPlaceholder.add(PostUiModel.Empty)
+              Result(
+                models = uiModelsWithPlaceholder,
+                isRefreshing = false,
+                showPlaceHolder = false,
+                canLoadMore = false
+              )
+            }
+
+            is Success -> {
+              val uiModels = flowState.item.models.map {
+                mapResponseToUiModels(it)
+              }
+              Result(
+                models = uiModels,
+                isRefreshing = false,
+                showPlaceHolder = false,
+                canLoadMore = flowState.item.canLoadMore
+              )
+            }
           }
         }
-      }
     }
   }
 }

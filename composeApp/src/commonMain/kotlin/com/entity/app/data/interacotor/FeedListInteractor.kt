@@ -13,17 +13,17 @@ class FeedListInteractor constructor(
   private val textErrorProvider: TextErrorProvider
 ) {
 
-  private suspend fun getFeedPostResponseModels(loadMore: Boolean): ResponseState<FeedListResponseModel> {
+  private suspend fun getFeedPostResponseModels(loadMore: Boolean, shouldRefreshList: Boolean): ResponseState<FeedListResponseModel> {
     return try {
-      ResponseState.Success(feedListRepository.getFeedPostResponseModels(loadMore))
+      ResponseState.Success(feedListRepository.getFeedPostResponseModels(loadMore, shouldRefreshList))
     } catch (error: Exception) {
       ResponseState.Error(error, textErrorProvider.getText(error))
     }
   }
 
-  suspend fun getFeedPostResponseModelsFlow(loadMore: Boolean): Flow<ResponseState<FeedListResponseModel>> = flow {
+  suspend fun getFeedPostResponseModelsFlow(loadMore: Boolean, shouldRefreshList: Boolean): Flow<ResponseState<FeedListResponseModel>> = flow {
     emit(ResponseState.Loading)
-    emit(getFeedPostResponseModels(loadMore))
+    emit(getFeedPostResponseModels(loadMore, shouldRefreshList))
   }
 
   fun clearFeedList() {

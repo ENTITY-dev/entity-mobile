@@ -25,7 +25,8 @@ class LaunchScreenViewModel :
       combine(
         animationDelayFlow(),
         launchInteractor.getLaunchSceneResponseFlow().filter { it !is ResponseState.Loading },
-        feedListInteractor.getFeedPostResponseModelsFlow(false).filter { it !is ResponseState.Loading },
+        feedListInteractor.getFeedPostResponseModelsFlow(loadMore = false, shouldRefreshList = false)
+          .filter { it !is ResponseState.Loading },
       ) { _, promoId, _ ->
         viewAction = if (promoId is ResponseState.Success && promoId.item.url?.isNotBlank() == true) {
           LaunchScreenAction.OpenPromoScreen(promoId.item.url)

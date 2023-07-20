@@ -13,13 +13,14 @@ class FeedListRepository constructor(
   @Volatile
   private var maxFeedModelsCount = 1L
 
-  suspend fun getFeedPostResponseModels(loadMore: Boolean): FeedListResponseModel {
+  suspend fun getFeedPostResponseModels(loadMore: Boolean, shouldRefreshList: Boolean): FeedListResponseModel {
     val canLoadMore = cachedFeedPostResponseModels.size < maxFeedModelsCount
-    if (shouldMakeRequest(loadMore, canLoadMore)) {
-      val skipValue = cachedFeedPostResponseModels.size
+    if (shouldMakeRequest(loadMore, canLoadMore, shouldRefreshList)) {
+      val skipValue = if (shouldRefreshList) 0 else cachedFeedPostResponseModels.size
       val response = feedListApi.getFeedPostResponseModels(skipValue)
       val feedPostResponseModels = response.items
       maxFeedModelsCount = response.maxCount
+      if (shouldRefreshList) cachedFeedPostResponseModels.clear()
       cachedFeedPostResponseModels.addAll(feedPostResponseModels)
     }
     return FeedListResponseModel(
@@ -32,8 +33,8 @@ class FeedListRepository constructor(
     cachedFeedPostResponseModels.clear()
   }
 
-  private fun shouldMakeRequest(loadMore: Boolean, canLoadMore: Boolean): Boolean {
-    return (loadMore || cachedFeedPostResponseModels.isEmpty()) && canLoadMore
+  private fun shouldMakeRequest(loadMore: Boolean, canLoadMore: Boolean, shouldRefreshList: Boolean): Boolean {
+    return ((loadMore || cachedFeedPostResponseModels.isEmpty()) && canLoadMore) || shouldRefreshList
   }
 
   inner class FeedListResponseModel(

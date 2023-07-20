@@ -70,7 +70,7 @@ fun PostComponent(
     Column(modifier = modifier.fillMaxWidth()) {
       // scene image
       ImageSlider(
-        images = listOf(model.scenePreviewUrl, model.scenePreviewUrl, model.scenePreviewUrl),
+        images = listOf(model.scenePreviewUrl),
         modifier = Modifier
           .fillMaxWidth()
           .height(238.dp),

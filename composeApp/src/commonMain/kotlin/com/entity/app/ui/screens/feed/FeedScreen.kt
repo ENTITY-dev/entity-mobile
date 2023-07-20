@@ -24,6 +24,7 @@ import com.entity.app.ui.screens.feed.FeedScreenAction.OpenWebViewer
 import com.entity.app.ui.screens.feed.FeedScreenEvent.AutoPlayItem
 import com.entity.app.ui.screens.feed.FeedScreenEvent.LoadNewPage
 import com.entity.app.ui.screens.feed.FeedScreenEvent.OptionsClick
+import com.entity.app.ui.screens.feed.FeedScreenEvent.PullToRefresh
 import com.entity.app.ui.screens.feed.FeedScreenEvent.RefreshFeedListScreen
 import com.entity.app.ui.screens.feed.FeedScreenEvent.SceneClick
 import com.entity.app.ui.screens.feed.FeedScreenState.Empty
@@ -54,6 +55,8 @@ object FeedScreen : Screen {
         FeedListWithPost(
           feedList = state.models,
           canLoadMore = state.canLoadMore,
+          isRefreshing = state.isRefreshing,
+          onRefresh = { screenModel.obtainEvent(PullToRefresh) },
           onLoadMore = { screenModel.obtainEvent(LoadNewPage) },
           onSceneClick = { screenModel.obtainEvent(SceneClick(it)) },
           onOptionsClick = { screenModel.obtainEvent(OptionsClick(it)) },
