@@ -1,6 +1,10 @@
 name: iOS CI
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - master
+      - dev
 
 jobs:
   ios_build:
