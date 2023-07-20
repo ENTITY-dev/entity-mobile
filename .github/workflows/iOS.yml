@@ -15,9 +15,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
       - run: cd iosApp
 
+      - name: location
+        run: pwd
+
       - name: Pod install
+        working-directory: iosApp/
         run: pod install
 
       - name: Build iOS app
