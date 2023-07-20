@@ -16,14 +16,13 @@ jobs:
         with:
           java-version: 11
 
-      - run: cd iosApp
-
-      - name: location
-        run: pwd
-
       - name: Pod install
         working-directory: iosApp/
         run: pod install
+
+      - name: Gradle build
+        id: assembleDebug
+        run: ./gradlew assembleDebug
 
       - name: Build iOS app
         id: buildPackage
