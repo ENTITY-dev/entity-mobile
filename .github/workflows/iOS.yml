@@ -12,6 +12,11 @@ jobs:
         with:
           java-version: 11
 
+      - run: cd iosApp
+
+      - name: Pod install
+        run: pod install
+
       - name: Build iOS app
         id: buildPackage
         run: xcodebuild -workspace iosApp/iosApp.xcworkspace -scheme iosApp -configuration Debug OBJROOT=${GITHUB_WORKSPACE}/build/ios SYMROOT=${GITHUB_WORKSPACE}/build/ios -sdk iphonesimulator -arch arm64
