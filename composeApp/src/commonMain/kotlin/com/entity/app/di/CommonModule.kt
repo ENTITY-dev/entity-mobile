@@ -8,6 +8,7 @@ import com.entity.app.data.interacotor.FeedListInteractor
 import com.entity.app.data.interacotor.LaunchInteractor
 import com.entity.app.data.interacotor.UserInfoInteractor
 import com.entity.app.data.interacotor.UserSettingsInteractor
+import com.entity.app.data.provider.TextErrorProvider
 import com.entity.app.data.repository.BottomBarNavigationStateRepository
 import com.entity.app.data.repository.FeedListRepository
 import com.entity.app.data.repository.LaunchRepository
@@ -30,6 +31,8 @@ val commonModule = module {
   singleOf(::UserInfoApi)
   singleOf(::UserSettingsApi)
   singleOf(::LaunchApi)
+
+  factoryOf(::TextErrorProvider)
 
   factoryOf(::UserSettingsInteractor)
   factoryOf(::FeedListInteractor)

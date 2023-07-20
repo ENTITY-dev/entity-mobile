@@ -4,4 +4,7 @@
   <string name="user_tab">Профиль</string>
   <string name="user_tab_sign_in_button">Войти</string>
   <string name="user_tab_sign_up_button">Зарегистрироваться</string>
+
+  <string name="error_timeout_text">Сервер не отвечает. \nПожалуйста, попробуйте позже.</string>
+  <string name="error_unknown">Неизвестная ошибка</string>
 </resources>

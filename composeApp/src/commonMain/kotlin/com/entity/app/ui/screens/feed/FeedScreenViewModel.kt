@@ -24,7 +24,7 @@ import org.koin.core.component.inject
 
 
 class FeedScreenViewModel :
-  EntityViewModel<FeedScreenState, FeedScreenEvent, FeedScreenAction>(initialState = FeedScreenState.EMPTY) {
+  EntityViewModel<FeedScreenState, FeedScreenEvent, FeedScreenAction>(initialState = FeedScreenState.Empty) {
 
   private val feedListInteractor: FeedListInteractor by inject()
 
@@ -39,7 +39,6 @@ class FeedScreenViewModel :
   override fun obtainEvent(viewEvent: FeedScreenEvent) {
     when (viewEvent) {
       RefreshFeedListScreen -> {
-        feedListInteractor.clearFeedList()
         loadFeedList()
       }
 
@@ -89,12 +88,15 @@ class FeedScreenViewModel :
 
   private fun loadFeedList() {
     updateFeedJob?.cancel()
+    val prevStateIsError = viewState as? FeedScreenState.Error
     updateFeedJob = coroutineScope.launch {
       feedListInteractor.getFeedPostResponseModelsFlow(loadMore = false).collectLatest { state ->
         viewState = when (state) {
-          is Error -> FeedScreenState.Error(state.throwable.message ?: "")
+          is Error -> FeedScreenState.Error(state.message ?: "", false)
 
-          Loading -> FeedScreenState.LOADING
+          Loading ->  {
+            prevStateIsError?.copy(isRefreshing = true) ?: FeedScreenState.LoadingWithPlaceholders
+          }
 
           is Success -> {
             val uiModels = state.item.models.map {

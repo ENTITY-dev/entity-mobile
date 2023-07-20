@@ -26,9 +26,9 @@ import com.entity.app.ui.screens.feed.FeedScreenEvent.LoadNewPage
 import com.entity.app.ui.screens.feed.FeedScreenEvent.OptionsClick
 import com.entity.app.ui.screens.feed.FeedScreenEvent.RefreshFeedListScreen
 import com.entity.app.ui.screens.feed.FeedScreenEvent.SceneClick
-import com.entity.app.ui.screens.feed.FeedScreenState.EMPTY
+import com.entity.app.ui.screens.feed.FeedScreenState.Empty
 import com.entity.app.ui.screens.feed.FeedScreenState.Error
-import com.entity.app.ui.screens.feed.FeedScreenState.LOADING
+import com.entity.app.ui.screens.feed.FeedScreenState.LoadingWithPlaceholders
 import com.entity.app.ui.screens.feed.FeedScreenState.Result
 import com.entity.app.ui.screens.scene.SceneScreenParam
 import com.entity.app.ui.screens.scene.SceneViewerScreen
@@ -44,9 +44,9 @@ object FeedScreen : Screen {
     val viewState by screenModel.viewStates().collectAsState()
 
     when (val state = viewState) {
-      EMPTY -> {}
+      Empty -> {}
 
-      LOADING -> {
+      LoadingWithPlaceholders -> {
         FeedListWithPlaceholders(count = 3)
       }
 
@@ -62,7 +62,11 @@ object FeedScreen : Screen {
       }
 
       is Error -> {
-        SafeScreen(state.errorText, isError = true) { screenModel.obtainEvent(RefreshFeedListScreen) }
+        SafeScreen(
+          state.errorText,
+          isError = true,
+          isRefreshing = state.isRefreshing
+        ) { screenModel.obtainEvent(RefreshFeedListScreen) }
       }
     }
 
@@ -86,6 +90,7 @@ object FeedScreen : Screen {
 private fun SafeScreen(
   text: String,
   isError: Boolean,
+  isRefreshing: Boolean,
   onRefresh: () -> Unit,
 ) {
   Column(
@@ -107,6 +112,7 @@ private fun SafeScreen(
         .padding(32.dp),
       text = "Refresh",
       enabled = true,
+      showLoader = isRefreshing,
       onRefresh
     )
   }

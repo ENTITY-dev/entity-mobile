@@ -2,6 +2,7 @@ package com.entity.app.data.interacotor
 
 import com.entity.app.data.ResponseState
 import com.entity.app.data.api.UserSettingsApi
+import com.entity.app.data.provider.TextErrorProvider
 import com.entity.app.data.repository.UserSettingsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.mapLatest
 class UserSettingsInteractor constructor(
   private val api: UserSettingsApi,
   private val repository: UserSettingsRepository,
+  private val textErrorProvider: TextErrorProvider
 ) {
   @OptIn(ExperimentalCoroutinesApi::class)
   fun isUserAuthFlow(): Flow<Boolean> {
@@ -26,7 +28,7 @@ class UserSettingsInteractor constructor(
       api.postAuthUser(userName, password)
       ResponseState.Success(Unit)
     } catch (error: Exception) {
-      ResponseState.Error(error)
+      ResponseState.Error(error, textErrorProvider.getText(error))
     }
   }
 
@@ -40,7 +42,7 @@ class UserSettingsInteractor constructor(
       api.postRegisterUser(userName, password, name)
       ResponseState.Success(Unit)
     } catch (error: Exception) {
-      ResponseState.Error(error)
+      ResponseState.Error(error, textErrorProvider.getText(error))
     }
   }
 

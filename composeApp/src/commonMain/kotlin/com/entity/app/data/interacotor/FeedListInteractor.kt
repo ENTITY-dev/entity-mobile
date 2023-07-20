@@ -1,6 +1,7 @@
 package com.entity.app.data.interacotor
 
 import com.entity.app.data.ResponseState
+import com.entity.app.data.provider.TextErrorProvider
 import com.entity.app.data.repository.FeedListRepository
 import com.entity.app.data.repository.FeedListRepository.FeedListResponseModel
 import kotlinx.coroutines.flow.Flow
@@ -9,13 +10,14 @@ import kotlinx.coroutines.flow.flow
 
 class FeedListInteractor constructor(
   private val feedListRepository: FeedListRepository,
+  private val textErrorProvider: TextErrorProvider
 ) {
 
-  suspend fun getFeedPostResponseModels(loadMore: Boolean): ResponseState<FeedListResponseModel> {
+  private suspend fun getFeedPostResponseModels(loadMore: Boolean): ResponseState<FeedListResponseModel> {
     return try {
       ResponseState.Success(feedListRepository.getFeedPostResponseModels(loadMore))
     } catch (error: Exception) {
-      ResponseState.Error(error)
+      ResponseState.Error(error, textErrorProvider.getText(error))
     }
   }
 

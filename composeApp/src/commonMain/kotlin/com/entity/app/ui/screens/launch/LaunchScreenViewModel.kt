@@ -30,7 +30,7 @@ class LaunchScreenViewModel :
         viewAction = if (promoId is ResponseState.Success && promoId.item.url?.isNotBlank() == true) {
           LaunchScreenAction.OpenPromoScreen(promoId.item.url)
         } else {
-          LaunchScreenAction.OpenMainScreen
+          LaunchScreenAction.OpenPromoScreen("64a1b6f834c1cc10c83d8b8e")
         }
       }.collect()
     }

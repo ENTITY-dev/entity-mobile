@@ -54,7 +54,7 @@ class LoginScreenViewModel :
       userSettingsInteractor.authUserFlow(username, password).collectLatest { flowState ->
         viewState = when (flowState) {
           is Error -> {
-            state.copy(isLoading = false, notificationText = flowState.throwable.message ?: "")
+            state.copy(isLoading = false, notificationText = flowState.message ?: "")
           }
 
           Loading -> {
@@ -81,7 +81,7 @@ class LoginScreenViewModel :
       userSettingsInteractor.registerUserFlow(username, password, name).collectLatest { flowState ->
         viewState = when (flowState) {
           is Error -> {
-            state.copy(isLoading = false, notificationText = flowState.throwable.message ?: "")
+            state.copy(isLoading = false, notificationText = flowState.message ?: "")
           }
 
           Loading -> {

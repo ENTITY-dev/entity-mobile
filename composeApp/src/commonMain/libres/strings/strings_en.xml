@@ -4,4 +4,7 @@
   <string name="user_tab">User</string>
   <string name="user_tab_sign_in_button">Sign in</string>
   <string name="user_tab_sign_up_button">Sign up</string>
+
+  <string name="error_timeout_text">Server didn't response. \nPleas try again later.</string>
+  <string name="error_unknown">Unknown error.</string>
 </resources>

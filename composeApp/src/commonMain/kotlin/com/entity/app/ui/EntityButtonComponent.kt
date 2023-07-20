@@ -5,10 +5,8 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ContentAlpha
@@ -18,9 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.entity.app.ui.components.EntityCircularProgressIndicator
 import com.entity.app.ui.theme.EntityTheme
 
 @Composable
@@ -28,6 +25,7 @@ fun EntityButtonComponent(
   modifier: Modifier = Modifier,
   text: String,
   enabled: Boolean = true,
+  showLoader: Boolean = false,
   onClick: () -> Unit,
 ) {
 
@@ -58,12 +56,19 @@ fun EntityButtonComponent(
     ),
     enabled = enabled
   ) {
-    Text(
-      text = text,
-      style = EntityTheme.typography().title,
-      color = if (enabled) EntityTheme.colors().mainText else EntityTheme.colors().mainText.copy(
-        ContentAlpha.disabled
+    if (showLoader) {
+      EntityCircularProgressIndicator(
+        modifier = Modifier.size(30.dp)
       )
-    )
+    } else {
+      Text(
+        text = text,
+        style = EntityTheme.typography().title,
+        color = if (enabled) EntityTheme.colors().mainText else EntityTheme.colors().mainText.copy(
+          ContentAlpha.disabled
+        )
+      )
+    }
+
   }
 }

@@ -103,14 +103,16 @@ object LoginScreen : Screen {
           EntityButtonComponent(
             modifier = Modifier.padding(top = 16.dp),
             text = EntityRes.string.user_tab_sign_in_button,
-            enabled = !state.isLoading
+            enabled = !state.isLoading,
+            showLoader = state.isLoading
           ) {
             screenModel.obtainEvent(LoginScreenEvent.OnLoginClick)
           }
           EntityButtonComponent(
             modifier = Modifier.padding(top = 16.dp),
             text = EntityRes.string.user_tab_sign_up_button,
-            enabled = !state.isLoading
+            enabled = !state.isLoading,
+            showLoader = state.isLoading
           ) {
             screenModel.obtainEvent(LoginScreenEvent.OnRegistrationClick)
           }

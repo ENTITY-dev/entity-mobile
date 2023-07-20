@@ -29,7 +29,7 @@ import kotlinx.serialization.json.Json
 
 const val ENTITY_DEFAULT_HOST = "entity.lol"
 private const val CONNECT_TIMEOUT_MS = 10000L
-private const val REQUEST_TIMEOUT_MS = 10000L
+private const val REQUEST_TIMEOUT_MS = 5000L
 
 @OptIn(ExperimentalSerializationApi::class)
 class EntityHttpClientFactory(
