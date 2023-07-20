@@ -127,7 +127,7 @@ android {
 
     applicationId = "com.entity.app.androidApp"
     versionCode = 1
-    versionName = "1.0.0"
+    versionName = "0.0.1"
   }
   sourceSets["main"].apply {
     manifest.srcFile("src/androidMain/AndroidManifest.xml")
