@@ -25,4 +25,3 @@ jobs:
         with:
           name: debug_androidApp_build
           path: composeApp/build/outputs/apk/debug/composeApp-debug.apk
-          env-url: BUILD_URL
