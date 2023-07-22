@@ -1,18 +1,23 @@
 package com.entity.app.data.interacotor
 
 import com.entity.app.data.ResponseState
+import com.entity.app.data.ResponseState.Error
+import com.entity.app.data.ResponseState.Success
 import com.entity.app.data.api.UserSettingsApi
 import com.entity.app.data.provider.TextErrorProvider
 import com.entity.app.data.repository.UserSettingsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.withContext
 
 class UserSettingsInteractor constructor(
   private val api: UserSettingsApi,
   private val repository: UserSettingsRepository,
-  private val textErrorProvider: TextErrorProvider
+  private val textErrorProvider: TextErrorProvider,
 ) {
   @OptIn(ExperimentalCoroutinesApi::class)
   fun isUserAuthFlow(): Flow<Boolean> {
@@ -23,28 +28,29 @@ class UserSettingsInteractor constructor(
     return repository.userTokenFlow.value.accessToken.isNotBlank()
   }
 
-  private suspend fun authUser(userName: String, password: String): ResponseState<Unit> {
-    return try {
+  private suspend fun authUser(userName: String, password: String): ResponseState<Unit> = withContext(Dispatchers.IO) {
+    return@withContext try {
       api.postAuthUser(userName, password)
-      ResponseState.Success(Unit)
+      Success(Unit)
     } catch (error: Exception) {
-      ResponseState.Error(error, textErrorProvider.getText(error))
+      Error(error, textErrorProvider.getText(error))
     }
   }
 
-  suspend fun authUserFlow(userName: String, password: String): Flow<ResponseState<Unit>>  = flow {
+  suspend fun authUserFlow(userName: String, password: String): Flow<ResponseState<Unit>> = flow {
     emit(ResponseState.Loading)
     emit(authUser(userName, password))
   }
 
-  private suspend fun registerUser(userName: String, password: String, name: String): ResponseState<Unit> {
-    return try {
-      api.postRegisterUser(userName, password, name)
-      ResponseState.Success(Unit)
-    } catch (error: Exception) {
-      ResponseState.Error(error, textErrorProvider.getText(error))
+  private suspend fun registerUser(userName: String, password: String, name: String): ResponseState<Unit> =
+    withContext(Dispatchers.IO) {
+      return@withContext try {
+        api.postRegisterUser(userName, password, name)
+        Success(Unit)
+      } catch (error: Exception) {
+        Error(error, textErrorProvider.getText(error))
+      }
     }
-  }
 
   suspend fun registerUserFlow(userName: String, password: String, name: String): Flow<ResponseState<Unit>> = flow {
     emit(ResponseState.Loading)

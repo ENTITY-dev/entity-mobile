@@ -75,7 +75,7 @@ class FeedScreenViewModel :
     val prevState = viewState as? Result ?: return
     updateFeedJob?.cancel()
     updateFeedJob = coroutineScope.launch {
-      feedListInteractor.getFeedPostResponseModelsFlow(loadMore = false, shouldRefreshList = true)
+      feedListInteractor.getFeedPostResponseModelsFlow(shouldLoadMore = false, shouldRefreshList = true)
         .collectLatest { state ->
           viewState = when (state) {
             is Error -> {
@@ -126,7 +126,7 @@ class FeedScreenViewModel :
     updateFeedJob?.cancel()
     val prevStateIsError = viewState as? FeedScreenState.Error
     updateFeedJob = coroutineScope.launch {
-      feedListInteractor.getFeedPostResponseModelsFlow(loadMore = false, shouldRefreshList = false)
+      feedListInteractor.getFeedPostResponseModelsFlow(shouldLoadMore = false, shouldRefreshList = false)
         .collectLatest { state ->
           viewState = when (state) {
             is Error -> FeedScreenState.Error(state.message ?: "", false)
@@ -157,7 +157,7 @@ class FeedScreenViewModel :
     }
     val state = viewState as? Result ?: return
     updateFeedJob = coroutineScope.launch {
-      feedListInteractor.getFeedPostResponseModelsFlow(loadMore = true, shouldRefreshList = false)
+      feedListInteractor.getFeedPostResponseModelsFlow(shouldLoadMore = true, shouldRefreshList = false)
         .collectLatest { flowState ->
           viewState = when (flowState) {
             is Error -> {

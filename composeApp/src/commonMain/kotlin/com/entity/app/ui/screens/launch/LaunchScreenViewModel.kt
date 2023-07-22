@@ -25,7 +25,7 @@ class LaunchScreenViewModel :
       combine(
         animationDelayFlow(),
         launchInteractor.getLaunchSceneResponseFlow().filter { it !is ResponseState.Loading },
-        feedListInteractor.getFeedPostResponseModelsFlow(loadMore = false, shouldRefreshList = false)
+        feedListInteractor.getFeedPostResponseModelsFlow(shouldLoadMore = false, shouldRefreshList = false)
           .filter { it !is ResponseState.Loading },
       ) { _, promoId, _ ->
         viewAction = if (promoId is ResponseState.Success && promoId.item.url?.isNotBlank() == true) {
