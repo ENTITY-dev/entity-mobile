@@ -1,5 +1,6 @@
 package com.entity.app.ui.screens.feed
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -62,10 +63,12 @@ fun FeedListWithPost(
       state = listState
     ) {
       itemsIndexed(feedList, key = { _, item -> item.sceneId }) { _, model ->
-        val modifier = Modifier.padding(
-          horizontal = 16.dp,
-          vertical = 8.dp
-        )
+        val modifier = remember {
+          Modifier.padding(
+            horizontal = 16.dp,
+            vertical = 8.dp
+          )
+        }
         if (model.sceneId == PLACEHOLDER_ID) {
           PlaceholderPostComponent(
             modifier = modifier

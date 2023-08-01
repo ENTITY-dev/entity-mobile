@@ -19,7 +19,7 @@ import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.headers
-import io.ktor.http.ContentType.Application
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode.Companion.Unauthorized
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
@@ -35,6 +35,13 @@ private const val REQUEST_TIMEOUT_MS = 5000L
 class EntityHttpClientFactory(
   private val userSettingsRepository: UserSettingsRepository,
 ) {
+  private val json = Json {
+    isLenient = true
+    ignoreUnknownKeys = true
+    prettyPrint = true
+    explicitNulls = false
+  }
+
   fun create() = HttpClient(HttpEngineFactory().createEngine()) {
     install(Logging) {
       logger = Logger.SIMPLE
@@ -43,12 +50,12 @@ class EntityHttpClientFactory(
 
     install(ContentNegotiation) {
       json(
-        Json {
-          isLenient = true
-          ignoreUnknownKeys = true
-          prettyPrint = true
-          explicitNulls = false
-        }
+        json,
+        contentType = ContentType.Application.Json
+      )
+      json(
+        json,
+        contentType = ContentType.Text.Plain
       )
     }
 
@@ -57,7 +64,7 @@ class EntityHttpClientFactory(
         protocol = URLProtocol.HTTPS
         host = ENTITY_DEFAULT_HOST
       }
-      contentType(Application.Json)
+      contentType(ContentType.Application.Json)
     }
 
     install(HttpTimeout) {
