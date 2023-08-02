@@ -2,7 +2,7 @@ package com.entity.app.data.repository
 
 import com.entity.app.data.api.FeedListApi
 import com.entity.app.data.model.PostResponseModel
-import kotlin.jvm.Volatile
+import kotlin.concurrent.Volatile
 
 class FeedListRepository constructor(
   private val feedListApi: FeedListApi,

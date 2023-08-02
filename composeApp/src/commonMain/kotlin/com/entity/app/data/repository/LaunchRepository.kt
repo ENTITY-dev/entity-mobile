@@ -2,7 +2,7 @@ package com.entity.app.data.repository
 
 import com.entity.app.data.api.LaunchApi
 import com.entity.app.data.model.LaunchResponseModel
-import kotlin.jvm.Volatile
+import kotlin.concurrent.Volatile
 
 class LaunchRepository constructor(
   private val launchApi: LaunchApi,

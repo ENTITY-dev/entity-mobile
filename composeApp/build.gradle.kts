@@ -10,12 +10,8 @@ plugins {
   alias(libs.plugins.apollo)
 }
 
-compose {
-  kotlinCompilerPlugin.set("1.4.7")
-}
-
 kotlin {
-  android {
+  androidTarget {
     compilations.all {
       kotlinOptions {
         jvmTarget = "1.8"
@@ -44,6 +40,8 @@ kotlin {
     val commonMain by getting {
       dependencies {
         api(libs.sentry)
+        api(libs.composeImageLoader)
+
         implementation(compose.runtime)
         implementation(compose.foundation)
         implementation(compose.material)
@@ -52,7 +50,6 @@ kotlin {
         implementation(libs.voyager.transitions)
         implementation(libs.voyager.bottom)
         implementation(libs.voyager.tab)
-        implementation(libs.composeImageLoader)
         implementation(libs.napier)
         implementation(libs.kotlinx.coroutines.core)
         implementation(libs.ktor.core)

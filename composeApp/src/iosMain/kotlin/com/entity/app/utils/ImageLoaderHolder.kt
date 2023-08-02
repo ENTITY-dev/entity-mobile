@@ -1,10 +1,10 @@
 package com.entity.app.utils
 
-import androidx.compose.ui.unit.Density
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents
 import io.ktor.client.HttpClient
+import kotlinx.cinterop.ExperimentalForeignApi
 import okio.Path.Companion.toPath
 import platform.Foundation.NSCachesDirectory
 import platform.Foundation.NSFileManager
@@ -28,6 +28,7 @@ fun generateImageLoader(httpClient: HttpClient): ImageLoader {
     }
   }
 }
+@OptIn(ExperimentalForeignApi::class)
 private fun getCacheDir(): String {
   return NSFileManager.defaultManager.URLForDirectory(
     NSCachesDirectory,

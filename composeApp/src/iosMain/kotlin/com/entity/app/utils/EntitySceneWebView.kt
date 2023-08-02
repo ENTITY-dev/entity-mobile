@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.interop.UIKitView
 import com.entity.app.ui.theme.EntityTheme
 import io.github.aakira.napier.Napier
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.delay
 import platform.Foundation.NSURL
 import platform.Foundation.NSURLRequest
@@ -23,6 +24,7 @@ import platform.WebKit.WKWebViewConfiguration
 import platform.WebKit.javaScriptEnabled
 import platform.darwin.NSObject
 
+@OptIn(ExperimentalForeignApi::class)
 @Composable
 actual fun EntitySceneWebView(modifier: Modifier, url: String, onSceneLoaded: () -> Unit, visible: Boolean) {
   val webView = remember {

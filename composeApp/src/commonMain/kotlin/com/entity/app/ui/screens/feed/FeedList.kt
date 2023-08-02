@@ -1,12 +1,11 @@
 package com.entity.app.ui.screens.feed
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -62,7 +61,7 @@ fun FeedListWithPost(
       modifier = Modifier.fillMaxSize(),
       state = listState
     ) {
-      itemsIndexed(feedList, key = { _, item -> item.sceneId }) { _, model ->
+      items(feedList, key = { item -> item.sceneId }) { model ->
         val modifier = remember {
           Modifier.padding(
             horizontal = 16.dp,

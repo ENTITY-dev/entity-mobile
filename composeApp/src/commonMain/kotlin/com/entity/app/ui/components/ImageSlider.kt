@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImageSlider(images: List<String?>, modifier: Modifier, isAutoPlay: Boolean) {
-  val pagerState: PagerState = rememberPagerState()
+  val pagerState = rememberPagerState()
   val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
   if (isDragged.not()) {
     with(pagerState) {

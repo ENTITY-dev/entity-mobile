@@ -3,6 +3,8 @@ package com.entity.app.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
@@ -17,6 +19,7 @@ class MainActivity : ComponentActivity() {
 
   private val httpClient by inject<HttpClient>()
 
+  @OptIn(ExperimentalFoundationApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     initSentry(this)
@@ -33,6 +36,7 @@ class MainActivity : ComponentActivity() {
       }
       CompositionLocalProvider(
         LocalImageLoader provides generateImageLoader(context = baseContext, httpClient = { httpClient }),
+        LocalOverscrollConfiguration provides null
       ) {
         App()
       }

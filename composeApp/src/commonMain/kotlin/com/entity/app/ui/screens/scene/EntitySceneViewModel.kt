@@ -14,8 +14,6 @@ class EntitySceneViewModel :
         val currentState = viewStates().value as? Visible ?: return
         viewState = currentState.copy(isLoading = true)
       }
-
-      else -> {}
     }
   }
 }
