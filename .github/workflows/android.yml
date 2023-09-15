@@ -1,0 +1,27 @@
+name: Android CI
+
+on:
+  pull_request:
+    branches:
+      - master
+      - dev
+
+jobs:
+  android_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Gradle build
+        id: buildPackage
+        run: ./gradlew assembleDebug
+
+      - name: Upload Bundle
+        uses: actions/upload-artifact@v2
+        with:
+          name: debug_androidApp_build
+          path: composeApp/build/outputs/apk/debug/composeApp-debug.apk

@@ -1,0 +1,29 @@
+name: iOS CI
+
+on:
+  pull_request:
+    branches:
+      - master
+      - dev
+
+jobs:
+  ios_build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Pod install
+        working-directory: iosApp/
+        run: pod install
+
+      - name: Gradle build
+        id: assembleDebug
+        run: ./gradlew assembleDebug
+
+      - name: Build iOS app
+        id: buildPackage
+        run: xcodebuild -workspace iosApp/iosApp.xcworkspace -scheme iosApp -configuration Debug OBJROOT=${GITHUB_WORKSPACE}/build/ios SYMROOT=${GITHUB_WORKSPACE}/build/ios -sdk iphonesimulator -arch arm64 -allowProvisioningDeviceRegistration -allowProvisioningUpdates
